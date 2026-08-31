@@ -1,0 +1,53 @@
+:root {
+  --gold: #c9a227;
+  --gold-soft: #e8d8a8;
+  --gold-bg: #faf4e6;
+  --maroon: #5a1a22;
+  --maroon-deep: #3f1017;
+  --maroon-soft: #7a2a34;
+  --ink: #2a2024;
+  --muted: #6a5c5f;
+  --paper: #fffdf8;
+  --border: #ece0d0;
+
+  --sans: 'Segoe UI', system-ui, Roboto, 'Nirmala UI', sans-serif;
+  --serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia,
+    'Nirmala UI', serif;
+
+  color-scheme: light;
+  font: 17px/1.6 var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--serif);
+  color: var(--maroon);
+  font-weight: 600;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Sachin Jewellers",
+  "short_name": "Sachin Jewellers",
+  "description": "Genuine gemstones, rudraksha and handcrafted bracelets.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#3f1017",
+  "theme_color": "#3f1017",
+  "icons": [
+    { "src": "/sj-favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/sj-favicon-512.png", "sizes": "512x512", "type": "image/png" },
+    {
+      "src": "/sj-favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
