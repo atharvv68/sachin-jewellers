@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, MotionConfig } from 'motion/react'
+import {
+  AnimatePresence,
+  motion,
+  MotionConfig,
+  useInView,
+  useReducedMotion,
+} from 'motion/react'
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import { EclipticGeoMoon } from 'astronomy-engine'
 import {
@@ -523,7 +529,6 @@ const TRANSLATIONS = {
       business: {
         title: 'Business Details',
         gstin: 'GSTIN',
-        address: 'Registered Address',
         proprietor: 'Proprietor',
       },
     },
@@ -772,7 +777,6 @@ const TRANSLATIONS = {
       business: {
         title: 'व्यावसायिक विवरण',
         gstin: 'जीएसटीआईएन',
-        address: 'पंजीकृत पता',
         proprietor: 'स्वामी',
       },
     },
@@ -786,25 +790,6 @@ const TRANSLATIONS = {
       emailLabel: 'ईमेल',
       gstinLabel: 'जीएसटीआईएन',
     },
-  },
-}
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: EASE },
-  },
-}
-
-// Parent container: fades/slides itself up, then staggers its children.
-const sectionContainer = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: EASE, staggerChildren: 0.08 },
   },
 }
 
@@ -840,14 +825,41 @@ function splashAlreadySeen() {
   }
 }
 
+/**
+ * A section that fades + rises in when it scrolls into view.
+ *
+ * The animation is strictly additive: the section renders fully visible by
+ * default, and the entrance only *replays* it. If the IntersectionObserver
+ * never fires (e.g. a section far taller than the viewport), or the user
+ * prefers reduced motion, the content is simply there — it never depends on
+ * an animation completing to be seen.
+ */
 function FadeSection({ children, className, ...rest }) {
+  const ref = useRef(null)
+  const reduce = useReducedMotion()
+  const inView = useInView(ref, { once: true, amount: 'some' })
+
+  // Only replay an entrance for sections that begin below the fold — an
+  // above-the-fold section would otherwise flash (visible → 0 → fade).
+  const [belowFoldAtMount, setBelowFoldAtMount] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (el && el.getBoundingClientRect().top > window.innerHeight) {
+      setBelowFoldAtMount(true)
+    }
+  }, [])
+
+  const playEntrance = !reduce && belowFoldAtMount && inView
+
   return (
     <motion.section
+      ref={ref}
       className={className}
-      variants={sectionContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.15 }}
+      initial={false}
+      animate={
+        playEntrance ? { opacity: [0, 1], y: [24, 0] } : { opacity: 1, y: 0 }
+      }
+      transition={reduce ? { duration: 0 } : { duration: 0.5, ease: EASE }}
       {...rest}
     >
       {children}
@@ -874,7 +886,6 @@ function TrustCard({ heading, children }) {
   return (
     <motion.div
       className="trust-card"
-      variants={fadeUp}
       whileHover={{ scale: 1.03 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
@@ -882,13 +893,6 @@ function TrustCard({ heading, children }) {
       <p>{children}</p>
     </motion.div>
   )
-}
-
-// Wrapper variant so grid items stagger in even though a grid <div> sits between
-// them and the animating section.
-const gridStagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.06 } },
 }
 
 // Catalogue card. English-only (stonesData has no Hindi beyond hindiName).
@@ -899,7 +903,6 @@ function ProductCard({ product }) {
   return (
     <motion.article
       className="product-card"
-      variants={fadeUp}
       whileHover={{ scale: 1.02 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
@@ -1819,10 +1822,6 @@ function PolicyModal({ policy, lang, t, onClose }) {
                     <dt>{pt.gstinLabel}</dt>
                     <dd>{BUSINESS.gstin}</dd>
                   </div>
-                  <div>
-                    <dt>{t.footer.business.address}</dt>
-                    <dd>{BUSINESS.address}</dd>
-                  </div>
                 </dl>
               </section>
             </div>
@@ -2090,11 +2089,11 @@ function MainSite() {
               ))}
             </div>
 
-            <motion.div className="catalogue-grid" variants={gridStagger}>
+            <div className="catalogue-grid">
               {shownProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
-            </motion.div>
+            </div>
           </FadeSection>
         )}
 
@@ -2150,7 +2149,7 @@ function MainSite() {
         {/* 3. About the Owner */}
         <FadeSection className="section owner">
           <h2>{t.owner.heading}</h2>
-          <motion.div className="owner-card" variants={fadeUp}>
+          <div className="owner-card">
             <div className="owner-monogram" aria-hidden="true">
               SV
             </div>
@@ -2184,7 +2183,7 @@ function MainSite() {
                 {t.owner.whatsapp}
               </Button>
             </div>
-          </motion.div>
+          </div>
         </FadeSection>
 
         {/* 4. Philosophy / quote */}
@@ -2425,9 +2424,6 @@ function MainSite() {
               <p>
                 <span>{t.footer.business.proprietor}:</span>{' '}
                 {BUSINESS.proprietor}
-              </p>
-              <p>
-                <span>{t.footer.business.address}:</span> {BUSINESS.address}
               </p>
             </div>
           </div>

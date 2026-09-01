@@ -14,8 +14,6 @@
 export const POLICY_BUSINESS = {
   name: 'Sachin Jewellers',
   proprietor: 'Sachin Kumar Verma',
-  address:
-    '38/44/1, Canal Road, Near Bhagwati Provision Store, Jakhan, Dehradun, Uttarakhand 248001',
   gstin: '05BKAPV6071M2ZP',
   phone: '7409985747',
   phoneIntl: '917409985747',
@@ -53,14 +51,14 @@ export const POLICIES = [
         en: {
           h: '2. Who we are',
           p: [
-            'This website is operated by Sachin Jewellers, a proprietorship of Sachin Kumar Verma, with its registered place of business at 38/44/1, Canal Road, Near Bhagwati Provision Store, Jakhan, Dehradun, Uttarakhand 248001, India. Our GSTIN is 05BKAPV6071M2ZP.',
+            'This website is operated by Sachin Jewellers, a proprietorship of Sachin Kumar Verma. Our GSTIN is 05BKAPV6071M2ZP.',
             'You can reach us on phone or WhatsApp at 7409985747 or by email at dudsachin0@gmail.com. All enquiries and orders are handled personally by our team.',
           ],
         },
         hi: {
           h: '2. हम कौन हैं',
           p: [
-            'यह वेबसाइट सचिन ज्वैलर्स द्वारा संचालित है, जो सचिन कुमार वर्मा की एकल स्वामित्व वाली फर्म है, जिसका पंजीकृत व्यवसाय स्थल 38/44/1, कैनाल रोड, भगवती प्रोविज़न स्टोर के पास, जाखन, देहरादून, उत्तराखंड 248001, भारत है। हमारा जीएसटीआईएन 05BKAPV6071M2ZP है।',
+            'यह वेबसाइट सचिन ज्वैलर्स द्वारा संचालित है, जो सचिन कुमार वर्मा की एकल स्वामित्व वाली फर्म है। हमारा जीएसटीआईएन 05BKAPV6071M2ZP है।',
             'आप हमसे फ़ोन या व्हाट्सएप पर 7409985747 अथवा ईमेल dudsachin0@gmail.com के ज़रिए संपर्क कर सकते हैं। सभी पूछताछ और ऑर्डर हमारी टीम द्वारा व्यक्तिगत रूप से संभाले जाते हैं।',
           ],
         },
@@ -203,14 +201,14 @@ export const POLICIES = [
         en: {
           h: '1. Our approach to your privacy',
           p: [
-            'Sachin Jewellers (proprietor Sachin Kumar Verma), 38/44/1, Canal Road, Near Bhagwati Provision Store, Jakhan, Dehradun, Uttarakhand 248001, is the data controller for the limited personal information handled through this website. We collect as little as possible, use it only to answer you and fulfil your order, and never sell it.',
+            'Sachin Jewellers (proprietor Sachin Kumar Verma) is the data controller for the limited personal information handled through this website. We collect as little as possible, use it only to answer you and fulfil your order, and never sell it.',
             'This policy explains what we collect, why, how long we keep it, and the choices you have.',
           ],
         },
         hi: {
           h: '1. आपकी निजता के प्रति हमारा दृष्टिकोण',
           p: [
-            'सचिन ज्वैलर्स (स्वामी सचिन कुमार वर्मा), 38/44/1, कैनाल रोड, भगवती प्रोविज़न स्टोर के पास, जाखन, देहरादून, उत्तराखंड 248001, इस वेबसाइट के माध्यम से संभाली गई सीमित व्यक्तिगत जानकारी का डेटा नियंत्रक है। हम यथासंभव कम जानकारी लेते हैं, उसका उपयोग केवल आपको उत्तर देने और आपका ऑर्डर पूरा करने के लिए करते हैं, और उसे कभी नहीं बेचते।',
+            'सचिन ज्वैलर्स (स्वामी सचिन कुमार वर्मा) इस वेबसाइट के माध्यम से संभाली गई सीमित व्यक्तिगत जानकारी का डेटा नियंत्रक है। हम यथासंभव कम जानकारी लेते हैं, उसका उपयोग केवल आपको उत्तर देने और आपका ऑर्डर पूरा करने के लिए करते हैं, और उसे कभी नहीं बेचते।',
             'यह नीति बताती है कि हम क्या एकत्र करते हैं, क्यों, कितने समय तक रखते हैं, और आपके पास कौन-से विकल्प हैं।',
           ],
         },

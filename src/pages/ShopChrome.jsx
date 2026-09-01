@@ -58,9 +58,6 @@ export function ShopFooter() {
         <p className="shop-footer-line">
           <span>GSTIN:</span> {BUSINESS.gstin}
         </p>
-        <p className="shop-footer-line">
-          <span>Address:</span> {BUSINESS.address}
-        </p>
         <p className="shop-footer-copy">
           &copy; {new Date().getFullYear()} {BRAND}. All rights reserved.
         </p>

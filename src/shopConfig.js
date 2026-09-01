@@ -15,7 +15,5 @@ export const OWNER_EMAIL = 'dudsachin0@gmail.com'
 
 export const BUSINESS = {
   gstin: '05BKAPV6071M2ZP',
-  address:
-    '38/44/1, Canal Road, Near Bhagwati Provision Store, Jakhan, Dehradun, Uttarakhand - 248001',
   proprietor: 'Sachin Kumar Verma',
 }
