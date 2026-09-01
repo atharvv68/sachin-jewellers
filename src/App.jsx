@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, MotionConfig } from 'motion/react'
 import { EclipticGeoMoon } from 'astronomy-engine'
-import { products } from './products'
+import { products, resolvePrice, productImages } from './products'
+import { POLICIES } from './policies'
 import sjLogo from './assets/sj-logo-final.png'
 import sjMonogram from './assets/sj-monogram-only.png'
 import './App.css'
@@ -10,8 +11,52 @@ const BANNER_IMG =
   'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1920&q=80'
 const QUOTE_IMG =
   'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=1920&q=80'
+// Editorial side imagery for the desktop two-column sections.
+const ABOUT_IMG =
+  'https://images.unsplash.com/photo-1611085583191-a3b181a88401?auto=format&fit=crop&w=900&q=80'
+const STONE_IMG =
+  'https://images.unsplash.com/photo-1551732998-9573f695fdbb?auto=format&fit=crop&w=900&q=80'
+const KUNDALI_IMG =
+  'https://images.unsplash.com/photo-1615655406736-b37c4fabf923?auto=format&fit=crop&w=900&q=80'
 
 const EASE = [0.22, 1, 0.36, 1]
+
+// Smoothly scroll a section into view (honours prefers-reduced-motion).
+function smoothScrollToId(id) {
+  const el = document.getElementById(id)
+  if (!el) return
+  const reduce =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+}
+
+// A unique, PayU-safe transaction id (alphanumeric, <= 25 chars).
+function makeTxnId() {
+  const bytes = new Uint8Array(8)
+  window.crypto.getRandomValues(bytes)
+  const rand = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('')
+  return `SJ${Date.now().toString(36)}${rand}`.slice(0, 25).toUpperCase()
+}
+
+// Build a hidden form and submit it — this navigates the browser to PayU's
+// hosted checkout, which is how PayU's classic integration expects the handoff.
+function postToPayU(action, fields) {
+  const form = document.createElement('form')
+  form.method = 'POST'
+  form.action = action
+  form.acceptCharset = 'UTF-8'
+  form.style.display = 'none'
+  Object.entries(fields).forEach(([name, value]) => {
+    const input = document.createElement('input')
+    input.type = 'hidden'
+    input.name = name
+    input.value = value == null ? '' : String(value)
+    form.appendChild(input)
+  })
+  document.body.appendChild(form)
+  form.submit()
+}
 
 // Shop WhatsApp number in international format, digits only (no + or spaces).
 const WHATSAPP_NUMBER = '911234567890' // TODO: replace with the shop's real number
@@ -290,12 +335,105 @@ const TRANSLATIONS = {
       waMessage:
         'Namaste! My rashi is {rashi} — recommended stone {stone}. I would like guidance on the exact stone and design.',
     },
+    featured: {
+      heading: 'Featured Gemstones',
+      buy: 'Buy Now',
+      enquire: 'Enquire on WhatsApp',
+      browse: 'Browse Catalogue',
+      prev: 'Previous gemstone',
+      next: 'Next gemstone',
+      show: 'Show',
+      position: '{i} of {n}',
+      buyWaMessage:
+        'Namaste Sachin Jewellers! I would like to buy this now: {product} ({price}). Please help me place the order.',
+    },
+    checkout: {
+      heading: 'Secure Checkout',
+      close: 'Close',
+      item: 'You are buying',
+      name: 'Full Name',
+      email: 'Email',
+      phone: 'Phone',
+      address: 'Delivery Address',
+      secure:
+        'Payment is processed securely by PayU. Your card, UPI and bank details are entered on PayU and are never seen or stored by us.',
+      pay: 'Pay {amount} securely',
+      redirecting: 'Taking you to PayU…',
+      error:
+        'We could not start the payment. Please try again in a moment, or contact us on WhatsApp.',
+    },
+    result: {
+      successTitle: 'Payment Successful',
+      successLead:
+        'Thank you. We have received your payment and your order is confirmed.',
+      failTitle: 'Payment Not Completed',
+      failLead:
+        'Your payment was not completed. If any amount was deducted it will be reversed by your bank automatically. You can try again any time.',
+      verifyLead:
+        'We received a payment response but could not verify it securely. Please do not re-pay yet.',
+      verifyNote:
+        'If any amount was deducted from your account, message us on WhatsApp with your Transaction ID below and we will confirm or refund it.',
+      reasonLabel: 'Reason',
+      product: 'Product',
+      amount: 'Amount',
+      txn: 'Transaction ID',
+      payId: 'PayU Payment ID',
+      successNote:
+        'Our team will verify the details and share dispatch and tracking information with you on WhatsApp.',
+      failNote:
+        'Need help completing your order? Message us on WhatsApp and we will assist you personally.',
+      home: 'Back to Home',
+      whatsapp: 'Contact on WhatsApp',
+      waSuccess:
+        'Namaste Sachin Jewellers! I have completed the payment for {product} (Transaction ID: {txnid}). Please confirm my order.',
+      waFailure:
+        'Namaste Sachin Jewellers! My payment for {product} (Transaction ID: {txnid}) did not complete. Please help me.',
+    },
+    pdp: {
+      back: 'Catalogue',
+      details: 'View details',
+      brand: 'Sachin Jewellers',
+      sale: 'Sale',
+      off: '{pct}% off',
+      originalPriceLabel: 'Original price',
+      shipping: 'Shipping calculated at checkout.',
+      lucky: 'Check Your Lucky Gemstone & Rudraksha',
+      carat: 'Carat',
+      origin: 'Origin',
+      quantity: 'Quantity',
+      decrease: 'Decrease quantity',
+      increase: 'Increase quantity',
+      addToCart: 'Add to Cart',
+      added: 'Added to cart',
+      buyNow: 'Buy Now',
+      enquire: 'Enquire on WhatsApp',
+      priceOnRequest: 'Price on request',
+      prevImage: 'Previous image',
+      nextImage: 'Next image',
+      imageLabel: 'Show image {n}',
+      waMessage:
+        'Namaste Sachin Jewellers! I am interested in {product}{carat} (Qty {qty}) — {price}. Please share details.',
+    },
+    cart: {
+      open: 'Open cart',
+      title: 'Your Cart',
+      empty: 'Your cart is empty.',
+      browse: 'Browse the catalogue',
+      remove: 'Remove',
+      qty: 'Qty',
+      each: 'each',
+      subtotal: 'Subtotal',
+      note: 'Shipping and any taxes are confirmed on WhatsApp before payment. For instant card / UPI payment, use “Buy Now” on a product.',
+      checkout: 'Checkout on WhatsApp',
+      waIntro: 'Namaste Sachin Jewellers! I would like to order:',
+      waLine: '{n}. {product}{carat} — x{qty} ({price})',
+      waSubtotal: 'Subtotal: {total}',
+    },
     banner: {
       title: 'Sachin Jewellers',
       tagline:
         'Genuine gemstones, sacred rudraksha and handcrafted bracelets, chosen with care and blessed by tradition.',
       shop: 'Shop Collection',
-      categories: 'View All Categories',
     },
     about: {
       heading: 'About Us',
@@ -391,12 +529,6 @@ const TRANSLATIONS = {
       success: 'Thank you. Your message has reached us and we will reply soon.',
     },
     footer: {
-      policies: [
-        'Refund Policy',
-        'Privacy Policy',
-        'Terms of Service',
-        'Shipping Policy',
-      ],
       rights: 'All rights reserved.',
       business: {
         title: 'Business Details',
@@ -404,6 +536,16 @@ const TRANSLATIONS = {
         address: 'Registered Address',
         proprietor: 'Proprietor',
       },
+    },
+    policy: {
+      close: 'Close',
+      updated: 'Last updated',
+      contactHeading: 'Questions about this policy?',
+      contactBody:
+        'Write to us and we will respond personally. Sachin Jewellers, proprietor Sachin Kumar Verma.',
+      phoneLabel: 'Phone / WhatsApp',
+      emailLabel: 'Email',
+      gstinLabel: 'GSTIN',
     },
   },
 
@@ -436,12 +578,105 @@ const TRANSLATIONS = {
       waMessage:
         'नमस्ते! मेरी राशि {rashi} है — अनुशंसित रत्न {stone}। मुझे सटीक रत्न और डिज़ाइन के लिए मार्गदर्शन चाहिए।',
     },
+    featured: {
+      heading: 'चुनिंदा रत्न',
+      buy: 'अभी खरीदें',
+      enquire: 'व्हाट्सएप पर पूछें',
+      browse: 'कैटलॉग देखें',
+      prev: 'पिछला रत्न',
+      next: 'अगला रत्न',
+      show: 'दिखाएँ',
+      position: '{n} में से {i}',
+      buyWaMessage:
+        'नमस्ते सचिन ज्वैलर्स! मैं इसे अभी खरीदना चाहता/चाहती हूँ: {product} ({price})। कृपया ऑर्डर करने में मेरी मदद करें।',
+    },
+    checkout: {
+      heading: 'सुरक्षित चेकआउट',
+      close: 'बंद करें',
+      item: 'आप खरीद रहे हैं',
+      name: 'पूरा नाम',
+      email: 'ईमेल',
+      phone: 'फ़ोन',
+      address: 'डिलीवरी पता',
+      secure:
+        'भुगतान PayU द्वारा सुरक्षित रूप से संसाधित होता है। आपके कार्ड, UPI और बैंक विवरण PayU पर दर्ज होते हैं और हम उन्हें कभी नहीं देखते या संग्रहीत नहीं करते।',
+      pay: '{amount} सुरक्षित भुगतान करें',
+      redirecting: 'PayU पर ले जाया जा रहा है…',
+      error:
+        'हम भुगतान शुरू नहीं कर सके। कृपया थोड़ी देर बाद पुनः प्रयास करें, या व्हाट्सएप पर संपर्क करें।',
+    },
+    result: {
+      successTitle: 'भुगतान सफल',
+      successLead:
+        'धन्यवाद। हमें आपका भुगतान प्राप्त हो गया है और आपका ऑर्डर पुष्ट हो गया है।',
+      failTitle: 'भुगतान पूरा नहीं हुआ',
+      failLead:
+        'आपका भुगतान पूरा नहीं हुआ। यदि कोई राशि कटी है तो वह आपके बैंक द्वारा स्वतः वापस कर दी जाएगी। आप किसी भी समय पुनः प्रयास कर सकते हैं।',
+      verifyLead:
+        'हमें भुगतान की प्रतिक्रिया मिली, पर हम इसे सुरक्षित रूप से सत्यापित नहीं कर सके। कृपया अभी दोबारा भुगतान न करें।',
+      verifyNote:
+        'यदि आपके खाते से कोई राशि कटी है, तो नीचे दिए ट्रांज़ैक्शन आईडी के साथ हमें व्हाट्सएप पर संदेश करें, हम उसकी पुष्टि या वापसी करेंगे।',
+      reasonLabel: 'कारण',
+      product: 'उत्पाद',
+      amount: 'राशि',
+      txn: 'ट्रांज़ैक्शन आईडी',
+      payId: 'PayU पेमेंट आईडी',
+      successNote:
+        'हमारी टीम विवरण सत्यापित करेगी और डिस्पैच व ट्रैकिंग जानकारी आपको व्हाट्सएप पर साझा करेगी।',
+      failNote:
+        'ऑर्डर पूरा करने में मदद चाहिए? हमें व्हाट्सएप पर संदेश करें, हम स्वयं आपकी सहायता करेंगे।',
+      home: 'होम पर लौटें',
+      whatsapp: 'व्हाट्सएप पर संपर्क करें',
+      waSuccess:
+        'नमस्ते सचिन ज्वैलर्स! मैंने {product} के लिए भुगतान पूरा कर लिया है (ट्रांज़ैक्शन आईडी: {txnid})। कृपया मेरा ऑर्डर पुष्ट करें।',
+      waFailure:
+        'नमस्ते सचिन ज्वैलर्स! {product} के लिए मेरा भुगतान (ट्रांज़ैक्शन आईडी: {txnid}) पूरा नहीं हुआ। कृपया मेरी मदद करें।',
+    },
+    pdp: {
+      back: 'कैटलॉग',
+      details: 'विवरण देखें',
+      brand: 'सचिन ज्वैलर्स',
+      sale: 'सेल',
+      off: '{pct}% छूट',
+      originalPriceLabel: 'मूल दाम',
+      shipping: 'शिपिंग चेकआउट पर तय की जाती है।',
+      lucky: 'अपना भाग्यशाली रत्न और रुद्राक्ष जानें',
+      carat: 'कैरेट',
+      origin: 'उद्गम',
+      quantity: 'मात्रा',
+      decrease: 'मात्रा घटाएँ',
+      increase: 'मात्रा बढ़ाएँ',
+      addToCart: 'कार्ट में डालें',
+      added: 'कार्ट में जोड़ा गया',
+      buyNow: 'अभी खरीदें',
+      enquire: 'व्हाट्सएप पर पूछें',
+      priceOnRequest: 'दाम पूछें',
+      prevImage: 'पिछली तस्वीर',
+      nextImage: 'अगली तस्वीर',
+      imageLabel: 'तस्वीर {n} दिखाएँ',
+      waMessage:
+        'नमस्ते सचिन ज्वैलर्स! मुझे {product}{carat} में रुचि है (मात्रा {qty}) — {price}। कृपया विवरण साझा करें।',
+    },
+    cart: {
+      open: 'कार्ट खोलें',
+      title: 'आपका कार्ट',
+      empty: 'आपका कार्ट खाली है।',
+      browse: 'कैटलॉग देखें',
+      remove: 'हटाएँ',
+      qty: 'मात्रा',
+      each: 'प्रति नग',
+      subtotal: 'उप-योग',
+      note: 'शिपिंग और कर भुगतान से पहले व्हाट्सएप पर पुष्ट किए जाते हैं। तुरंत कार्ड / UPI भुगतान के लिए किसी उत्पाद पर “अभी खरीदें” का उपयोग करें।',
+      checkout: 'व्हाट्सएप पर चेकआउट करें',
+      waIntro: 'नमस्ते सचिन ज्वैलर्स! मैं यह ऑर्डर करना चाहता/चाहती हूँ:',
+      waLine: '{n}. {product}{carat} — x{qty} ({price})',
+      waSubtotal: 'उप-योग: {total}',
+    },
     banner: {
       title: 'सचिन ज्वैलर्स',
       tagline:
         'असली रत्न, पवित्र रुद्राक्ष और हाथ से बने ब्रेसलेट — पूरी सावधानी से चुने गए और परंपरा से सँवारे गए।',
       shop: 'कलेक्शन देखें',
-      categories: 'सभी श्रेणियाँ देखें',
     },
     about: {
       heading: 'हमारे बारे में',
@@ -537,12 +772,6 @@ const TRANSLATIONS = {
       success: 'धन्यवाद। आपका संदेश हम तक पहुँच गया है और हम जल्द ही उत्तर देंगे।',
     },
     footer: {
-      policies: [
-        'रिफ़ंड नीति',
-        'गोपनीयता नीति',
-        'सेवा की शर्तें',
-        'शिपिंग नीति',
-      ],
       rights: 'सर्वाधिकार सुरक्षित।',
       business: {
         title: 'व्यावसायिक विवरण',
@@ -550,6 +779,16 @@ const TRANSLATIONS = {
         address: 'पंजीकृत पता',
         proprietor: 'स्वामी',
       },
+    },
+    policy: {
+      close: 'बंद करें',
+      updated: 'अंतिम अद्यतन',
+      contactHeading: 'इस नीति के बारे में प्रश्न?',
+      contactBody:
+        'हमें लिखें, हम स्वयं उत्तर देंगे। सचिन ज्वैलर्स, स्वामी सचिन कुमार वर्मा।',
+      phoneLabel: 'फ़ोन / व्हाट्सएप',
+      emailLabel: 'ईमेल',
+      gstinLabel: 'जीएसटीआईएन',
     },
   },
 }
@@ -670,48 +909,352 @@ function formatPrice(price, t) {
   return `₹${new Intl.NumberFormat('en-IN').format(price)}`
 }
 
-function ProductCard({ product, lang, t }) {
+// Struck-through original price + current price + optional "Sale" badge.
+function PriceTag({ product, variant, t, className = '' }) {
+  const { current, original, onSale } = resolvePrice(product, variant)
+  const cls = `price-tag ${className}`.trim()
+  if (current == null) {
+    return <p className={cls}>{t.pdp.priceOnRequest}</p>
+  }
+  const pct = onSale
+    ? Math.round(((original - current) / original) * 100)
+    : 0
+  return (
+    <p className={cls}>
+      {onSale && (
+        <span className="price-was">
+          <span className="sr-only">{t.pdp.originalPriceLabel}: </span>
+          {formatPrice(original, t)}
+        </span>
+      )}
+      <span className="price-now">{formatPrice(current, t)}</span>
+      {onSale && (
+        <span className="price-badge">
+          {t.pdp.sale}
+          {pct >= 5 ? ` · ${t.pdp.off.replace('{pct}', pct)}` : ''}
+        </span>
+      )}
+    </p>
+  )
+}
+
+function ProductCard({ product, lang, t, onOpen }) {
   const name = product.name[lang]
-  const priceText = formatPrice(product.price, t)
-  const waMsg = t.catalogue.waMessage
-    .replace('{product}', name)
-    .replace('{price}', priceText)
-  const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMsg)}`
+  const open = () => onOpen(product.id)
 
   return (
     <motion.article
       className="product-card"
       variants={fadeUp}
-      whileHover={{ scale: 1.03 }}
+      whileHover={{ scale: 1.02 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
-      <div className="product-img">
+      <span className="product-img">
         <img
           src={product.image}
-          alt={name}
+          alt=""
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.style.display = 'none'
+          }}
+        />
+      </span>
+      <div className="product-info">
+        {product.category && (
+          <span className="product-tag">{product.category[lang]}</span>
+        )}
+        <h3>{name}</h3>
+        <PriceTag product={product} t={t} className="product-price" />
+        <p className="product-desc">{product.description[lang]}</p>
+        <div className="product-card-actions">
+          {/* ::after stretches this button over the whole card */}
+          <button
+            type="button"
+            className="btn btn-outline product-details-btn"
+            onClick={open}
+          >
+            {t.pdp.details}
+            <span className="sr-only"> — {name}</span>
+          </button>
+        </div>
+      </div>
+    </motion.article>
+  )
+}
+
+/* ---------- Featured Gemstones — 3D coverflow carousel ----------
+ * Desktop: portrait cards in a 3D coverflow — centre card large and sharp,
+ * side cards rotated in 3D, scaled down, dimmed and blurred. Clicking a side
+ * card (or a dot / arrow) brings it to the centre with a Motion spring.
+ * Mobile (<=768px): the 3D transforms are dropped for a plain scroll-snap
+ * swipe strip. Data comes from products.js (Gemstone category). */
+const FEATURED = products.filter(
+  (p) => p.category && p.category.en === 'Gemstone',
+)
+
+function useIsMobile(query = '(max-width: 768px)') {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(query).matches,
+  )
+  useEffect(() => {
+    const mq = window.matchMedia(query)
+    const onChange = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [query])
+  return isMobile
+}
+
+function FeaturedCard({ product, lang, t, onBrowseCatalogue, onBuyNow }) {
+  const priceText = formatPrice(product.price, t)
+  const enquireMsg = t.catalogue.waMessage
+    .replace('{product}', product.name.en)
+    .replace('{price}', priceText)
+  const enquireHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    enquireMsg,
+  )}`
+  // Fixed-price gemstones check out through PayU; "price on request" items
+  // fall back to a WhatsApp order message.
+  const canCheckout = product.price != null
+  const buyMsg = t.featured.buyWaMessage
+    .replace('{product}', product.name.en)
+    .replace('{price}', priceText)
+  const buyHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    buyMsg,
+  )}`
+
+  return (
+    <div className="cf-card-inner">
+      <div className="cf-card-img">
+        <img
+          src={product.image}
+          alt={product.name.en}
           loading="lazy"
           onError={(e) => {
             e.currentTarget.style.display = 'none'
           }}
         />
       </div>
-      <div className="product-info">
-        {product.category && (
-          <span className="product-tag">{product.category[lang]}</span>
-        )}
-        <h3>{name}</h3>
-        <p className="product-price">{priceText}</p>
-        <p className="product-desc">{product.description[lang]}</p>
-        <Button
-          href={waHref}
-          target="_blank"
-          rel="noreferrer"
-          className="btn whatsapp-btn"
-        >
-          {t.catalogue.enquire}
-        </Button>
+      <div className="cf-card-body">
+        <h3 className="cf-card-name">
+          {product.name.en}
+          <span className="cf-card-name-hi">{product.name.hi}</span>
+        </h3>
+        <p className="cf-card-desc">{product.description[lang]}</p>
+        <div className="cf-card-actions">
+          {canCheckout ? (
+            <button
+              type="button"
+              className="btn btn-solid cf-card-btn"
+              onClick={() => onBuyNow(product)}
+            >
+              {t.featured.buy}
+            </button>
+          ) : (
+            <a
+              className="btn btn-solid cf-card-btn"
+              href={buyHref}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {t.featured.buy}
+            </a>
+          )}
+          <a
+            className="btn whatsapp-btn cf-card-btn"
+            href={enquireHref}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M12 3.5a8.4 8.4 0 0 0-7.2 12.7L3.5 20.5l4.4-1.15A8.4 8.4 0 1 0 12 3.5Zm4.8 11.9c-.17.47-1 .94-1.37.97-.37.03-.72.17-2.42-.5-2.05-.8-3.35-2.9-3.45-3.03-.1-.13-.82-1.06-.82-2.03 0-.97.52-1.45.7-1.65.18-.2.4-.25.53-.25h.4c.12 0 .29-.06.45.34.17.4.57 1.4.62 1.5.05.1.08.22.02.35-.07.13-.1.21-.2.33-.1.12-.21.26-.3.35-.1.1-.21.21-.09.41.12.2.52.86 1.12 1.39.77.69 1.42.9 1.62 1 .2.1.31.08.43-.05.11-.13.5-.6.63-.8.13-.2.27-.17.45-.1.18.07 1.18.57 1.38.67.2.1.33.15.38.23.05.08.05.48-.12.95Z"
+              />
+            </svg>
+            {t.featured.enquire}
+          </a>
+          <button
+            type="button"
+            className="cf-card-link"
+            onClick={onBrowseCatalogue}
+          >
+            {t.featured.browse}
+            <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
+              <path
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
-    </motion.article>
+    </div>
+  )
+}
+
+function FeaturedGemstones({ lang, t, onBrowseCatalogue, onBuyNow }) {
+  const items = FEATURED
+  const n = items.length
+  const [active, setActive] = useState(0)
+  const isMobile = useIsMobile()
+
+  const go = (dir) => setActive((a) => (a + dir + n) % n)
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault()
+      go(-1)
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault()
+      go(1)
+    }
+  }
+
+  if (!n) return null
+
+  if (isMobile) {
+    return (
+      <FadeSection id="featured-gemstones" className="section featured">
+        <h2>{t.featured.heading}</h2>
+        <ul className="cf-scroll">
+          {items.map((p) => (
+            <li className="cf-scroll-card" key={p.id}>
+              <FeaturedCard
+                product={p}
+                lang={lang}
+                t={t}
+                onBrowseCatalogue={onBrowseCatalogue}
+                onBuyNow={onBuyNow}
+              />
+            </li>
+          ))}
+        </ul>
+      </FadeSection>
+    )
+  }
+
+  return (
+    <FadeSection id="featured-gemstones" className="section featured">
+      <h2>{t.featured.heading}</h2>
+
+      <div
+        className="cf-stage"
+        role="group"
+        aria-roledescription="carousel"
+        aria-label={t.featured.heading}
+        tabIndex={0}
+        onKeyDown={onKeyDown}
+      >
+        <div className="cf-track">
+          {items.map((p, i) => {
+            let off = i - active
+            if (off > n / 2) off -= n
+            if (off < -n / 2) off += n
+            const abs = Math.abs(off)
+            const visible = abs <= 2
+            const isCenter = off === 0
+            return (
+              <motion.div
+                key={p.id}
+                className={`cf-card${isCenter ? ' is-center' : ''}`}
+                initial={false}
+                animate={{
+                  x: off * 132,
+                  rotateY: isCenter ? 0 : off > 0 ? -40 : 40,
+                  scale: isCenter ? 1 : abs === 1 ? 0.82 : 0.66,
+                  opacity: !visible ? 0 : isCenter ? 1 : abs === 1 ? 0.62 : 0.28,
+                  filter: isCenter ? 'blur(0px)' : `blur(${abs * 2.5}px)`,
+                }}
+                transition={{ type: 'spring', stiffness: 260, damping: 30 }}
+                style={{
+                  zIndex: 50 - abs,
+                  pointerEvents: visible ? 'auto' : 'none',
+                }}
+              >
+                {!isCenter && (
+                  <button
+                    type="button"
+                    className="cf-card-hit"
+                    onClick={() => setActive(i)}
+                    tabIndex={visible ? 0 : -1}
+                    aria-label={`${t.featured.show}: ${p.name.en}`}
+                  />
+                )}
+                {/* side cards are decorative — inert keeps their link/text
+                    out of the tab order and the accessibility tree */}
+                <div className="cf-card-content" inert={!isCenter}>
+                  <FeaturedCard
+                    product={p}
+                    lang={lang}
+                    t={t}
+                    onBrowseCatalogue={onBrowseCatalogue}
+                    onBuyNow={onBuyNow}
+                  />
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className="cf-controls">
+        <button
+          type="button"
+          className="cf-arrow"
+          onClick={() => go(-1)}
+          aria-label={t.featured.prev}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 5l-7 7 7 7"
+            />
+          </svg>
+        </button>
+        <div className="cf-dots">
+          {items.map((p, i) => (
+            <button
+              key={p.id}
+              type="button"
+              className={`cf-dot${i === active ? ' active' : ''}`}
+              aria-label={p.name.en}
+              aria-current={i === active ? 'true' : undefined}
+              onClick={() => setActive(i)}
+            />
+          ))}
+        </div>
+        <button
+          type="button"
+          className="cf-arrow"
+          onClick={() => go(1)}
+          aria-label={t.featured.next}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <p className="cf-status" aria-live="polite">
+        {t.featured.position.replace('{i}', active + 1).replace('{n}', n)} —{' '}
+        {items[active].name.en}
+      </p>
+    </FadeSection>
   )
 }
 
@@ -729,8 +1272,10 @@ function ChatBubble({ from, delay = 0, children }) {
   )
 }
 
-function RatnaSalaah({ lang }) {
-  const [open, setOpen] = useState(false)
+function RatnaSalaah({ lang, open: openProp, onOpenChange }) {
+  const [openState, setOpenState] = useState(false)
+  const open = openProp ?? openState
+  const setOpen = onOpenChange ?? setOpenState
   const [picks, setPicks] = useState([]) // rashi keys, in the order chosen
   const bodyRef = useRef(null)
   const rt = TRANSLATIONS[lang].ratna
@@ -937,8 +1482,9 @@ function KundaliChecker({ lang }) {
   return (
     <FadeSection id="kundali-checker" className="section kundali">
       <h2>{kt.heading}</h2>
-      <p className="enquiry-intro">{kt.intro}</p>
 
+      <div className="split">
+        <div className="split-main">
       <form className="kundali-form" onSubmit={submit}>
         <label>
           {kt.fullName}
@@ -1062,7 +1608,1150 @@ function KundaliChecker({ lang }) {
           </motion.div>
         )}
       </AnimatePresence>
+        </div>
+        <aside className="split-aside">
+          <p className="split-lead">{kt.intro}</p>
+          <img className="split-img" src={KUNDALI_IMG} alt="" loading="lazy" />
+        </aside>
+      </div>
     </FadeSection>
+  )
+}
+
+/* ---------- Footer policy modal ---------- */
+function PolicyModal({ policy, lang, t, onClose }) {
+  const panelRef = useRef(null)
+  const onCloseRef = useRef(onClose)
+  useEffect(() => {
+    onCloseRef.current = onClose
+  })
+  const pt = t.policy
+  const policyKey = policy?.key
+
+  // Runs once per open (keyed on the policy, not on every parent re-render, so
+  // toggling the language while reading doesn't re-steal focus).
+  useEffect(() => {
+    if (!policyKey) return undefined
+    const onKey = (e) => {
+      if (e.key === 'Escape') onCloseRef.current()
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const raf = requestAnimationFrame(() => panelRef.current?.focus())
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+      cancelAnimationFrame(raf)
+    }
+  }, [policyKey])
+
+  // Keep Tab focus inside the open dialog.
+  const trapFocus = (e) => {
+    if (e.key !== 'Tab' || !panelRef.current) return
+    const f = panelRef.current.querySelectorAll(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    )
+    if (!f.length) return
+    const first = f[0]
+    const last = f[f.length - 1]
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  }
+
+  return (
+    <AnimatePresence>
+      {policy && (
+        <motion.div
+          className="policy-overlay"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) onClose()
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: EASE }}
+        >
+          <motion.div
+            className="policy-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="policy-title"
+            ref={panelRef}
+            tabIndex={-1}
+            onKeyDown={trapFocus}
+            initial={{ opacity: 0, y: 52, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 34, scale: 0.985 }}
+            transition={{ duration: 0.34, ease: EASE }}
+          >
+            <div className="policy-header">
+              <div>
+                <p className="policy-eyebrow">{t.brand}</p>
+                <h2 id="policy-title">{policy.title[lang]}</h2>
+              </div>
+              <button
+                type="button"
+                className="policy-close"
+                onClick={onClose}
+                aria-label={pt.close}
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    d="M6 6l12 12M18 6L6 18"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div className="policy-body">
+              {policy.updated && (
+                <p className="policy-updated">
+                  {pt.updated}: {policy.updated[lang]}
+                </p>
+              )}
+
+              {policy.sections.map((s, i) => (
+                <section
+                  key={i}
+                  className={
+                    s.callout
+                      ? 'policy-section policy-callout'
+                      : 'policy-section'
+                  }
+                >
+                  <h3>{s[lang].h}</h3>
+                  {s[lang].p.map((para, j) => (
+                    <p key={j}>{para}</p>
+                  ))}
+                </section>
+              ))}
+
+              <section className="policy-section policy-contact">
+                <h3>{pt.contactHeading}</h3>
+                <p>{pt.contactBody}</p>
+                <dl>
+                  <div>
+                    <dt>{pt.phoneLabel}</dt>
+                    <dd>
+                      <a href={`tel:+${OWNER_PHONE_INTL}`}>{OWNER_PHONE}</a>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>{pt.emailLabel}</dt>
+                    <dd>
+                      <a href={`mailto:${OWNER_EMAIL}`}>{OWNER_EMAIL}</a>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>{pt.gstinLabel}</dt>
+                    <dd>{BUSINESS.gstin}</dd>
+                  </div>
+                  <div>
+                    <dt>{t.footer.business.address}</dt>
+                    <dd>{BUSINESS.address}</dd>
+                  </div>
+                </dl>
+              </section>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+/* ---------- Single-product "Buy Now" checkout (PayU) ---------- */
+function CheckoutForm({ product, lang, t }) {
+  const ct = t.checkout
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+  })
+  const [phase, setPhase] = useState('idle') // 'idle' | 'submitting' | 'error'
+
+  const update = (e) =>
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
+
+  const priceText = formatPrice(product.price, t)
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (phase === 'submitting') return
+    setPhase('submitting')
+    try {
+      const txnid = makeTxnId()
+      const amount = Number(product.price).toFixed(2)
+      const productinfo = product.name.en
+      const firstname = form.name.trim()
+      const email = form.email.trim()
+
+      const resp = await fetch('/api/payu-hash', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ txnid, amount, productinfo, firstname, email }),
+      })
+      const data = await resp.json().catch(() => ({}))
+      if (!resp.ok || !data.key || !data.hash || !data.action) {
+        throw new Error(data.error || 'gateway')
+      }
+
+      const origin = window.location.origin
+      postToPayU(data.action, {
+        key: data.key,
+        txnid,
+        amount,
+        productinfo,
+        firstname,
+        email,
+        phone: form.phone.trim(),
+        surl: `${origin}/api/payu-response`,
+        furl: `${origin}/api/payu-response`,
+        udf1: '',
+        udf2: '',
+        udf3: '',
+        udf4: '',
+        udf5: '',
+        lastname: '',
+        address1: form.address.trim().slice(0, 100),
+        city: '',
+        state: '',
+        country: 'India',
+        zipcode: '',
+      })
+      // The browser now navigates to PayU's hosted checkout.
+    } catch {
+      setPhase('error')
+    }
+  }
+
+  return (
+    <>
+      <div className="checkout-summary">
+        <div className="checkout-summary-img">
+          <img
+            src={product.image}
+            alt=""
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+            }}
+          />
+        </div>
+        <div>
+          <p className="checkout-summary-label">{ct.item}</p>
+          <p className="checkout-summary-name">{product.name[lang]}</p>
+          <p className="checkout-summary-price">{priceText}</p>
+        </div>
+      </div>
+
+      <form className="enquiry-form checkout-form" onSubmit={submit}>
+        <label>
+          {ct.name}
+          <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={update}
+            autoComplete="name"
+            required
+          />
+        </label>
+        <label>
+          {ct.email}
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={update}
+            autoComplete="email"
+            required
+          />
+        </label>
+        <label>
+          {ct.phone}
+          <input
+            type="tel"
+            name="phone"
+            value={form.phone}
+            onChange={update}
+            autoComplete="tel"
+            pattern="[0-9+\- ]{7,15}"
+            required
+          />
+        </label>
+        <label>
+          {ct.address}
+          <textarea
+            name="address"
+            rows="3"
+            value={form.address}
+            onChange={update}
+            autoComplete="street-address"
+            required
+          />
+        </label>
+
+        {phase === 'error' && <p className="kundali-error">{ct.error}</p>}
+
+        <p className="checkout-note">{ct.secure}</p>
+
+        <Button
+          as="button"
+          type="submit"
+          className="btn btn-solid checkout-submit"
+          disabled={phase === 'submitting'}
+          aria-busy={phase === 'submitting'}
+        >
+          {phase === 'submitting'
+            ? ct.redirecting
+            : ct.pay.replace('{amount}', priceText)}
+        </Button>
+      </form>
+    </>
+  )
+}
+
+function CheckoutModal({ product, lang, t, onClose }) {
+  const panelRef = useRef(null)
+  const onCloseRef = useRef(onClose)
+  useEffect(() => {
+    onCloseRef.current = onClose
+  })
+  const ct = t.checkout
+  const open = Boolean(product)
+
+  useEffect(() => {
+    if (!open) return undefined
+    const onKey = (e) => {
+      if (e.key === 'Escape') onCloseRef.current()
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const raf = requestAnimationFrame(() => panelRef.current?.focus())
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+      cancelAnimationFrame(raf)
+    }
+  }, [open])
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="policy-overlay"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) onClose()
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: EASE }}
+        >
+          <motion.div
+            className="policy-panel checkout-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="checkout-title"
+            ref={panelRef}
+            tabIndex={-1}
+            initial={{ opacity: 0, y: 52, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 34, scale: 0.985 }}
+            transition={{ duration: 0.34, ease: EASE }}
+          >
+            <div className="policy-header">
+              <div>
+                <p className="policy-eyebrow">{t.brand}</p>
+                <h2 id="checkout-title">{ct.heading}</h2>
+              </div>
+              <button
+                type="button"
+                className="policy-close"
+                onClick={onClose}
+                aria-label={ct.close}
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    d="M6 6l12 12M18 6L6 18"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div className="policy-body checkout-body">
+              {/* keyed so a fresh form mounts for each product opened */}
+              <CheckoutForm
+                key={product.id}
+                product={product}
+                lang={lang}
+                t={t}
+              />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+/* ---------- PayU return pages: /checkout/success and /checkout/failure ---------- */
+const CHECK_PATH = 'M20 6L9 17l-5-5'
+const CROSS_PATH = 'M6 6l12 12M18 6L6 18'
+
+function CheckoutResult({ kind }) {
+  const [lang, setLang] = useState(() => {
+    try {
+      return localStorage.getItem('sj-lang') || 'hi'
+    } catch {
+      return 'hi'
+    }
+  })
+  useEffect(() => {
+    try {
+      localStorage.setItem('sj-lang', lang)
+    } catch {
+      /* storage unavailable */
+    }
+    document.documentElement.lang = lang
+  }, [lang])
+  const toggleLang = () => setLang((l) => (l === 'en' ? 'hi' : 'en'))
+
+  const t = TRANSLATIONS[lang]
+  const rt = t.result
+  const success = kind === 'success'
+
+  const params =
+    typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams()
+  const txnid = params.get('txnid') || ''
+  const amountRaw = params.get('amount') || ''
+  const pinfo = params.get('pinfo') || ''
+  const pid = params.get('pid') || ''
+  const errorKind = params.get('error') || ''
+  const reason = params.get('reason') || ''
+  const unverified = errorKind === 'verification'
+
+  const amountText =
+    amountRaw && !Number.isNaN(Number(amountRaw))
+      ? `₹${new Intl.NumberFormat('en-IN').format(Number(amountRaw))}`
+      : ''
+
+  const waTemplate = success ? rt.waSuccess : rt.waFailure
+  const waMsg = waTemplate
+    .replace('{product}', pinfo || '—')
+    .replace('{txnid}', txnid || '—')
+  const waHref = `https://wa.me/${OWNER_PHONE_INTL}?text=${encodeURIComponent(
+    waMsg,
+  )}`
+
+  const lead = success
+    ? rt.successLead
+    : unverified
+      ? rt.verifyLead
+      : rt.failLead
+  const note = success
+    ? rt.successNote
+    : unverified
+      ? rt.verifyNote
+      : rt.failNote
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <div className="result-page">
+        <header className="result-nav">
+          <a className="result-brand" href="/">
+            <img src={sjMonogram} alt="" />
+            <span>{t.brand}</span>
+          </a>
+          <button
+            type="button"
+            className="lang-toggle"
+            onClick={toggleLang}
+            aria-label="Switch language / भाषा बदलें"
+          >
+            <span className={lang === 'en' ? 'active' : ''}>EN</span>
+            <span className="lang-sep">/</span>
+            <span className={lang === 'hi' ? 'active' : ''}>हि</span>
+          </button>
+        </header>
+
+        <motion.main
+          className="result-card"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: EASE }}
+        >
+          <div
+            className={`result-badge ${success ? 'ok' : 'bad'}`}
+            aria-hidden="true"
+          >
+            <svg viewBox="0 0 24 24" width="30" height="30">
+              <path
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d={success ? CHECK_PATH : CROSS_PATH}
+              />
+            </svg>
+          </div>
+
+          <h1>{success ? rt.successTitle : rt.failTitle}</h1>
+          <p className="result-lead">{lead}</p>
+
+          {!success && !unverified && reason && (
+            <p className="result-reason">
+              {rt.reasonLabel}: {reason}
+            </p>
+          )}
+
+          {(pinfo || amountText || txnid || pid) && (
+            <dl className="result-details">
+              {pinfo && (
+                <div>
+                  <dt>{rt.product}</dt>
+                  <dd>{pinfo}</dd>
+                </div>
+              )}
+              {amountText && (
+                <div>
+                  <dt>{rt.amount}</dt>
+                  <dd>{amountText}</dd>
+                </div>
+              )}
+              {txnid && (
+                <div>
+                  <dt>{rt.txn}</dt>
+                  <dd>{txnid}</dd>
+                </div>
+              )}
+              {success && pid && (
+                <div>
+                  <dt>{rt.payId}</dt>
+                  <dd>{pid}</dd>
+                </div>
+              )}
+            </dl>
+          )}
+
+          <p className="result-note">{note}</p>
+
+          <div className="result-actions">
+            <a className="btn btn-solid" href="/">
+              {rt.home}
+            </a>
+            <a
+              className="btn whatsapp-btn"
+              href={waHref}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {rt.whatsapp}
+            </a>
+          </div>
+        </motion.main>
+      </div>
+    </MotionConfig>
+  )
+}
+
+/* ---------- Product detail page ---------- */
+function QtyStepper({ qty, setQty, t }) {
+  return (
+    <div className="pdp-qty">
+      <button
+        type="button"
+        onClick={() => setQty((q) => Math.max(1, q - 1))}
+        aria-label={t.pdp.decrease}
+        disabled={qty <= 1}
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M5 12h14" />
+        </svg>
+      </button>
+      <span aria-live="polite">{qty}</span>
+      <button
+        type="button"
+        onClick={() => setQty((q) => Math.min(99, q + 1))}
+        aria-label={t.pdp.increase}
+        disabled={qty >= 99}
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            d="M12 5v14M5 12h14"
+          />
+        </svg>
+      </button>
+    </div>
+  )
+}
+
+function ProductDetail({
+  productId,
+  lang,
+  t,
+  onBack,
+  onBuyNow,
+  onAddToCart,
+  onCheckLucky,
+}) {
+  const product = products.find((p) => p.id === productId)
+  const [imgIndex, setImgIndex] = useState(0)
+  const [caratIndex, setCaratIndex] = useState(0)
+  const [qty, setQty] = useState(1)
+  const [added, setAdded] = useState(false)
+
+  if (!product) {
+    return (
+      <section className="section pdp">
+        <button type="button" className="pdp-back" onClick={onBack}>
+          {t.pdp.back}
+        </button>
+      </section>
+    )
+  }
+
+  const images = productImages(product)
+  const variants =
+    product.caratVariants && product.caratVariants.length
+      ? product.caratVariants
+      : null
+  const variant = variants
+    ? variants[Math.min(caratIndex, variants.length - 1)]
+    : null
+  const { current } = resolvePrice(product, variant)
+  const purchasable = current != null
+  const caratLabel = variant ? variant.label : ''
+  const displayName = product.name[lang]
+
+  const stepImg = (d) =>
+    setImgIndex((v) => (v + d + images.length) % images.length)
+
+  const waMsg = t.pdp.waMessage
+    .replace('{product}', displayName)
+    .replace(
+      '{carat}',
+      caratLabel ? ` (${caratLabel} ${t.pdp.carat.toLowerCase()})` : '',
+    )
+    .replace('{qty}', qty)
+    .replace(
+      '{price}',
+      purchasable ? formatPrice(current, t) : t.pdp.priceOnRequest,
+    )
+  const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    waMsg,
+  )}`
+
+  const buyNow = () =>
+    onBuyNow({
+      id: `${product.id}::${caratLabel || 'std'}::${qty}`,
+      name: {
+        en:
+          product.name.en +
+          (caratLabel ? ` - ${caratLabel}ct` : '') +
+          (qty > 1 ? ` x${qty}` : ''),
+        hi:
+          product.name.hi +
+          (caratLabel ? ` - ${caratLabel}ct` : '') +
+          (qty > 1 ? ` x${qty}` : ''),
+      },
+      image: images[imgIndex] || images[0],
+      price: current * qty,
+    })
+
+  const addToCart = () => {
+    onAddToCart({
+      key: `${product.id}::${caratLabel}`,
+      id: product.id,
+      name: product.name,
+      image: images[0],
+      carat: caratLabel,
+      unitPrice: current,
+      qty,
+    })
+    setAdded(true)
+    window.setTimeout(() => setAdded(false), 1800)
+  }
+
+  return (
+    <motion.section
+      className="section pdp"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: EASE }}
+    >
+      <button type="button" className="pdp-back" onClick={onBack}>
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15 5l-7 7 7 7"
+          />
+        </svg>
+        {t.pdp.back}
+      </button>
+
+      <div className="pdp-grid">
+        <div className="pdp-media">
+          <div className="pdp-stage">
+            <AnimatePresence initial={false}>
+              <motion.img
+                key={imgIndex}
+                src={images[imgIndex]}
+                alt={displayName}
+                className="pdp-main-img"
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.99 }}
+                transition={{ duration: 0.5, ease: EASE }}
+                onError={(e) => {
+                  e.currentTarget.style.visibility = 'hidden'
+                }}
+              />
+            </AnimatePresence>
+          </div>
+
+          <div className="pdp-reflection" aria-hidden="true">
+            <AnimatePresence initial={false}>
+              <motion.img
+                key={imgIndex}
+                src={images[imgIndex]}
+                alt=""
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: EASE }}
+              />
+            </AnimatePresence>
+          </div>
+
+          {images.length > 1 && (
+            <div className="pdp-thumbs">
+              <button
+                type="button"
+                className="pdp-thumb-nav"
+                onClick={() => stepImg(-1)}
+                aria-label={t.pdp.prevImage}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 5l-7 7 7 7"
+                  />
+                </svg>
+              </button>
+              <div className="pdp-thumb-track">
+                {images.map((src, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`pdp-thumb${idx === imgIndex ? ' active' : ''}`}
+                    onClick={() => setImgIndex(idx)}
+                    aria-label={t.pdp.imageLabel.replace('{n}', idx + 1)}
+                    aria-current={idx === imgIndex ? 'true' : undefined}
+                  >
+                    <img
+                      src={src}
+                      alt=""
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.style.visibility = 'hidden'
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="pdp-thumb-nav"
+                onClick={() => stepImg(1)}
+                aria-label={t.pdp.nextImage}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="pdp-info">
+          <p className="pdp-eyebrow">{t.pdp.brand}</p>
+          <h1 className="pdp-title">{displayName}</h1>
+
+          <PriceTag
+            product={product}
+            variant={variant}
+            t={t}
+            className="pdp-price"
+          />
+
+          <p className="pdp-shipping">{t.pdp.shipping}</p>
+
+          <button type="button" className="pdp-lucky" onClick={onCheckLucky}>
+            {t.pdp.lucky}
+            <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+              <path
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+
+          {product.promoLines &&
+            Array.isArray(product.promoLines[lang]) &&
+            product.promoLines[lang].length > 0 && (
+              <ul className="pdp-promo">
+                {product.promoLines[lang].map((line, idx) => (
+                  <li key={idx}>
+                    <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M20 6L9 17l-5-5"
+                      />
+                    </svg>
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+          {variants && (
+            <div className="pdp-field">
+              <p className="pdp-field-label">{t.pdp.carat}</p>
+              <div className="pdp-pills">
+                {variants.map((v, idx) => (
+                  <button
+                    key={v.label}
+                    type="button"
+                    className={`pdp-pill${idx === caratIndex ? ' active' : ''}`}
+                    onClick={() => setCaratIndex(idx)}
+                    aria-pressed={idx === caratIndex}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {product.origin && (
+            <div className="pdp-field">
+              <p className="pdp-field-label">{t.pdp.origin}</p>
+              <p className="pdp-origin">{product.origin[lang]}</p>
+            </div>
+          )}
+
+          <div className="pdp-field">
+            <p className="pdp-field-label">{t.pdp.quantity}</p>
+            <QtyStepper qty={qty} setQty={setQty} t={t} />
+          </div>
+
+          <div className="pdp-actions">
+            {purchasable && (
+              <>
+                <motion.button
+                  type="button"
+                  className="btn btn-outline pdp-add"
+                  whileTap={{ scale: 0.97 }}
+                  onClick={addToCart}
+                >
+                  {added ? t.pdp.added : t.pdp.addToCart}
+                </motion.button>
+                <motion.button
+                  type="button"
+                  className="btn btn-solid pdp-buy"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+                  onClick={buyNow}
+                >
+                  {t.pdp.buyNow}
+                </motion.button>
+              </>
+            )}
+            <Button
+              href={waHref}
+              target="_blank"
+              rel="noreferrer"
+              className="btn whatsapp-btn pdp-enquire"
+            >
+              <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M12 3.5a8.4 8.4 0 0 0-7.2 12.7L3.5 20.5l4.4-1.15A8.4 8.4 0 1 0 12 3.5Zm4.8 11.9c-.17.47-1 .94-1.37.97-.37.03-.72.17-2.42-.5-2.05-.8-3.35-2.9-3.45-3.03-.1-.13-.82-1.06-.82-2.03 0-.97.52-1.45.7-1.65.18-.2.4-.25.53-.25h.4c.12 0 .29-.06.45.34.17.4.57 1.4.62 1.5.05.1.08.22.02.35-.07.13-.1.21-.2.33-.1.12-.21.26-.3.35-.1.1-.21.21-.09.41.12.2.52.86 1.12 1.39.77.69 1.42.9 1.62 1 .2.1.31.08.43-.05.11-.13.5-.6.63-.8.13-.2.27-.17.45-.1.18.07 1.18.57 1.38.67.2.1.33.15.38.23.05.08.05.48-.12.95Z"
+                />
+              </svg>
+              {t.pdp.enquire}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </motion.section>
+  )
+}
+
+/* ---------- Cart (localStorage) ---------- */
+const CART_KEY = 'sj-cart'
+
+function loadCart() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(CART_KEY) || '[]')
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+function useCart() {
+  const [items, setItems] = useState(loadCart)
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(items))
+    } catch {
+      /* storage unavailable */
+    }
+  }, [items])
+
+  const add = (item) =>
+    setItems((cur) => {
+      const idx = cur.findIndex((x) => x.key === item.key)
+      if (idx === -1) return [...cur, { ...item, qty: item.qty || 1 }]
+      const next = cur.slice()
+      next[idx] = {
+        ...next[idx],
+        qty: Math.min(99, next[idx].qty + (item.qty || 1)),
+      }
+      return next
+    })
+  const setQty = (key, qty) =>
+    setItems((cur) =>
+      cur.map((x) =>
+        x.key === key ? { ...x, qty: Math.max(1, Math.min(99, qty)) } : x,
+      ),
+    )
+  const remove = (key) => setItems((cur) => cur.filter((x) => x.key !== key))
+
+  const count = items.reduce((n, x) => n + x.qty, 0)
+  const subtotal = items.reduce((s, x) => s + (x.unitPrice || 0) * x.qty, 0)
+  return { items, add, setQty, remove, count, subtotal }
+}
+
+function CartDrawer({ open, cart, lang, t, onClose, onBrowse }) {
+  const panelRef = useRef(null)
+  const onCloseRef = useRef(onClose)
+  useEffect(() => {
+    onCloseRef.current = onClose
+  })
+
+  useEffect(() => {
+    if (!open) return undefined
+    const onKey = (e) => {
+      if (e.key === 'Escape') onCloseRef.current()
+    }
+    document.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const raf = requestAnimationFrame(() => panelRef.current?.focus())
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+      cancelAnimationFrame(raf)
+    }
+  }, [open])
+
+  const ct = t.cart
+  const waMsg = [
+    ct.waIntro,
+    ...cart.items.map((x, i) =>
+      ct.waLine
+        .replace('{n}', i + 1)
+        .replace('{product}', (x.name && x.name[lang]) || '')
+        .replace('{carat}', x.carat ? ` (${x.carat})` : '')
+        .replace('{qty}', x.qty)
+        .replace('{price}', formatPrice((x.unitPrice || 0) * x.qty, t)),
+    ),
+    ct.waSubtotal.replace('{total}', formatPrice(cart.subtotal, t)),
+  ].join('\n')
+  const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    waMsg,
+  )}`
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="cart-overlay"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) onClose()
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: EASE }}
+        >
+          <motion.div
+            className="cart-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label={ct.title}
+            ref={panelRef}
+            tabIndex={-1}
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ duration: 0.36, ease: EASE }}
+          >
+            <div className="cart-header">
+              <h2>{ct.title}</h2>
+              <button
+                type="button"
+                className="policy-close"
+                onClick={onClose}
+                aria-label={t.pdp.back}
+              >
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    d="M6 6l12 12M18 6L6 18"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {cart.items.length === 0 ? (
+              <div className="cart-empty">
+                <p>{ct.empty}</p>
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={onBrowse}
+                >
+                  {ct.browse}
+                </button>
+              </div>
+            ) : (
+              <>
+                <ul className="cart-list">
+                  {cart.items.map((x) => (
+                    <li className="cart-item" key={x.key}>
+                      <div className="cart-item-img">
+                        <img
+                          src={x.image}
+                          alt=""
+                          onError={(e) => {
+                            e.currentTarget.style.visibility = 'hidden'
+                          }}
+                        />
+                      </div>
+                      <div className="cart-item-body">
+                        <p className="cart-item-name">
+                          {(x.name && x.name[lang]) || ''}
+                          {x.carat ? (
+                            <span className="cart-item-carat">
+                              {' '}
+                              · {t.pdp.carat} {x.carat}
+                            </span>
+                          ) : null}
+                        </p>
+                        <p className="cart-item-price">
+                          {formatPrice(x.unitPrice, t)} {ct.each}
+                        </p>
+                        <div className="cart-item-row">
+                          <QtyStepper
+                            qty={x.qty}
+                            setQty={(fn) =>
+                              cart.setQty(
+                                x.key,
+                                typeof fn === 'function' ? fn(x.qty) : fn,
+                              )
+                            }
+                            t={t}
+                          />
+                          <button
+                            type="button"
+                            className="cart-remove"
+                            onClick={() => cart.remove(x.key)}
+                          >
+                            {ct.remove}
+                          </button>
+                        </div>
+                      </div>
+                      <p className="cart-item-total">
+                        {formatPrice((x.unitPrice || 0) * x.qty, t)}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="cart-foot">
+                  <div className="cart-subtotal">
+                    <span>{ct.subtotal}</span>
+                    <span>{formatPrice(cart.subtotal, t)}</span>
+                  </div>
+                  <p className="cart-note">{ct.note}</p>
+                  <a
+                    className="btn whatsapp-btn cart-checkout"
+                    href={waHref}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {ct.checkout}
+                  </a>
+                </div>
+              </>
+            )}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 
@@ -1089,25 +2778,72 @@ const SOCIALS = [
   },
 ]
 
+// Route between the main site and the PayU return pages by pathname. Kept as a
+// thin wrapper so MainSite's hooks never sit behind a conditional return.
 function App() {
-  const [lang, setLang] = useState('hi') // default to Hindi
-  const [view, setView] = useState('about') // 'about' | 'catalogue'
+  const path =
+    typeof window !== 'undefined' ? window.location.pathname : '/'
+  if (path === '/checkout/success') return <CheckoutResult kind="success" />
+  if (path === '/checkout/failure') return <CheckoutResult kind="failure" />
+  return <MainSite />
+}
+
+function MainSite() {
+  const [lang, setLang] = useState(() => {
+    try {
+      return localStorage.getItem('sj-lang') || 'hi'
+    } catch {
+      return 'hi'
+    }
+  })
+  const [view, setView] = useState('about') // 'about' | 'catalogue' | 'product'
+  const [productId, setProductId] = useState(null) // open product detail page
   const [showSplash, setShowSplash] = useState(() => !splashAlreadySeen())
   const [form, setForm] = useState({ name: '', email: '', phone: '', comment: '' })
   const [sent, setSent] = useState(false)
   const [stoneForm, setStoneForm] = useState({ name: '', rashi: '' })
   const [stoneResult, setStoneResult] = useState(null) // rashi key, once submitted
+  const [policyKey, setPolicyKey] = useState(null) // open footer policy, or null
+  const [checkoutProduct, setCheckoutProduct] = useState(null) // product in checkout, or null
+  const [ratnaOpen, setRatnaOpen] = useState(false) // Ratna Salaah panel
+  const [cartOpen, setCartOpen] = useState(false)
+  const cart = useCart()
+  const policyTriggerRef = useRef(null) // element to refocus when the modal closes
 
   const t = TRANSLATIONS[lang]
 
+  const openProduct = (id) => {
+    setProductId(id)
+    setView('product')
+  }
+  const addToCart = (item) => {
+    cart.add(item)
+    setCartOpen(true)
+  }
+
+  const openPolicy = (key, e) => {
+    policyTriggerRef.current = e.currentTarget
+    setPolicyKey(key)
+  }
+  const closePolicy = () => {
+    setPolicyKey(null)
+    policyTriggerRef.current?.focus()
+  }
+  const activePolicy = POLICIES.find((p) => p.key === policyKey) || null
+
   useEffect(() => {
     document.documentElement.lang = lang
+    try {
+      localStorage.setItem('sj-lang', lang)
+    } catch {
+      /* storage unavailable (private mode, etc.) */
+    }
   }, [lang])
 
-  // Jump to the top whenever the visitor switches between About and Catalogue.
+  // Jump to the top on any top-level view change (About / Catalogue / a product).
   useEffect(() => {
     window.scrollTo({ top: 0 })
-  }, [view])
+  }, [view, productId])
 
   // Play the intro splash once per visit, then fade it out after ~2s.
   useEffect(() => {
@@ -1177,12 +2913,35 @@ function App() {
             </button>
             <button
               type="button"
-              className={view === 'catalogue' ? 'active' : ''}
+              className={
+                view === 'catalogue' || view === 'product' ? 'active' : ''
+              }
               onClick={() => setView('catalogue')}
             >
               {t.nav.catalogue}
             </button>
           </div>
+          <motion.button
+            type="button"
+            className="nav-cart"
+            onClick={() => setCartOpen(true)}
+            aria-label={t.cart.open}
+            whileTap={{ scale: 0.94 }}
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 8h12l-1 12H7L6 8Zm3 0V6a3 3 0 0 1 6 0v2"
+              />
+            </svg>
+            {cart.count > 0 && (
+              <span className="nav-cart-count">{cart.count}</span>
+            )}
+          </motion.button>
           <motion.button
             type="button"
             className="lang-toggle"
@@ -1200,6 +2959,19 @@ function App() {
       </nav>
 
       <main className="about-page">
+        {view === 'product' && (
+          <ProductDetail
+            key={productId}
+            productId={productId}
+            lang={lang}
+            t={t}
+            onBack={() => setView('catalogue')}
+            onBuyNow={setCheckoutProduct}
+            onAddToCart={addToCart}
+            onCheckLucky={() => setRatnaOpen(true)}
+          />
+        )}
+
         {view === 'catalogue' && (
           <FadeSection className="section catalogue">
             <h2>{t.catalogue.heading}</h2>
@@ -1211,6 +2983,7 @@ function App() {
                   product={product}
                   lang={lang}
                   t={t}
+                  onOpen={openProduct}
                 />
               ))}
             </motion.div>
@@ -1239,11 +3012,15 @@ function App() {
             </h1>
             <p className="tagline">{t.banner.tagline}</p>
             <div className="banner-buttons">
-              <Button href="#" className="btn btn-solid">
+              <Button
+                href="#featured-gemstones"
+                className="btn btn-solid"
+                onClick={(e) => {
+                  e.preventDefault()
+                  smoothScrollToId('featured-gemstones')
+                }}
+              >
                 {t.banner.shop}
-              </Button>
-              <Button href="#" className="btn btn-outline">
-                {t.banner.categories}
               </Button>
             </div>
           </motion.div>
@@ -1252,9 +3029,16 @@ function App() {
         {/* 2. About Us */}
         <FadeSection className="section about">
           <h2>{t.about.heading}</h2>
-          {t.about.paragraphs.map((para, i) => (
-            <p key={i}>{para}</p>
-          ))}
+          <div className="about-grid">
+            <div className="about-copy">
+              {t.about.paragraphs.map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
+            <aside className="about-aside">
+              <img src={ABOUT_IMG} alt="" loading="lazy" />
+            </aside>
+          </div>
         </FadeSection>
 
         {/* 3. About the Owner */}
@@ -1306,6 +3090,14 @@ function App() {
           <blockquote>{t.quote}</blockquote>
         </FadeSection>
 
+        {/* 4b. Featured Gemstones — 3D coverflow */}
+        <FeaturedGemstones
+          lang={lang}
+          t={t}
+          onBrowseCatalogue={() => setView('catalogue')}
+          onBuyNow={setCheckoutProduct}
+        />
+
         {/* 5. Why choose us */}
         <FadeSection className="section trust">
           <h2>{t.trust.heading}</h2>
@@ -1321,8 +3113,9 @@ function App() {
         {/* 6. Find Your Stone */}
         <FadeSection id="find-your-stone" className="section find-stone">
           <h2>{t.findStone.heading}</h2>
-          <p className="enquiry-intro">{t.findStone.intro}</p>
 
+          <div className="split">
+            <div className="split-main">
           <form className="stone-form" onSubmit={submitStone}>
             <label>
               {t.findStone.name}
@@ -1391,6 +3184,17 @@ function App() {
               </motion.div>
             )}
           </AnimatePresence>
+            </div>
+            <aside className="split-aside">
+              <p className="split-lead">{t.findStone.intro}</p>
+              <img
+                className="split-img"
+                src={STONE_IMG}
+                alt=""
+                loading="lazy"
+              />
+            </aside>
+          </div>
         </FadeSection>
 
         {/* 7. Free Kundali Checker */}
@@ -1399,7 +3203,8 @@ function App() {
         {/* 8. Enquiry form */}
         <FadeSection className="section enquiry">
           <h2>{t.enquiry.heading}</h2>
-          <p className="enquiry-intro">{t.enquiry.intro}</p>
+          <div className="split">
+            <div className="split-main">
           {sent ? (
             <p className="form-success">{t.enquiry.success}</p>
           ) : (
@@ -1448,6 +3253,28 @@ function App() {
               </Button>
             </form>
           )}
+            </div>
+            <aside className="split-aside">
+              <p className="split-lead">{t.enquiry.intro}</p>
+              <div className="split-contact">
+                <a href={`tel:+${OWNER_PHONE_INTL}`}>
+                  {t.owner.phoneLabel}: {OWNER_PHONE}
+                </a>
+                <a href={`mailto:${OWNER_EMAIL}`}>
+                  {t.owner.emailLabel}: {OWNER_EMAIL}
+                </a>
+                <a
+                  href={`https://wa.me/${OWNER_PHONE_INTL}?text=${encodeURIComponent(
+                    t.owner.waMessage,
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t.owner.whatsapp}
+                </a>
+              </div>
+            </aside>
+          </div>
         </FadeSection>
           </>
         )}
@@ -1473,10 +3300,15 @@ function App() {
               ))}
             </div>
             <nav className="policies">
-              {t.footer.policies.map((p) => (
-                <a key={p} href="#">
-                  {p}
-                </a>
+              {POLICIES.map((p) => (
+                <button
+                  key={p.key}
+                  type="button"
+                  className="policy-link"
+                  onClick={(e) => openPolicy(p.key, e)}
+                >
+                  {p.title[lang]}
+                </button>
               ))}
             </nav>
             <p className="copyright">
@@ -1502,7 +3334,37 @@ function App() {
         </footer>
       </main>
 
-      <RatnaSalaah lang={lang} />
+      <RatnaSalaah
+        lang={lang}
+        open={ratnaOpen}
+        onOpenChange={setRatnaOpen}
+      />
+
+      <PolicyModal
+        policy={activePolicy}
+        lang={lang}
+        t={t}
+        onClose={closePolicy}
+      />
+
+      <CheckoutModal
+        product={checkoutProduct}
+        lang={lang}
+        t={t}
+        onClose={() => setCheckoutProduct(null)}
+      />
+
+      <CartDrawer
+        open={cartOpen}
+        cart={cart}
+        lang={lang}
+        t={t}
+        onClose={() => setCartOpen(false)}
+        onBrowse={() => {
+          setCartOpen(false)
+          setView('catalogue')
+        }}
+      />
     </MotionConfig>
   )
 }

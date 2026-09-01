@@ -1,23 +1,57 @@
+/* ============================================================================
+ *  SACHIN JEWELLERS — DESIGN TOKENS & BASE
+ *  Premium dark: warm near-black ground, single brand-gold accent, editorial
+ *  serif display. See design-system/sachin-jewellers/MASTER.md.
+ * ========================================================================== */
 :root {
-  --gold: #c9a227;
-  --gold-soft: #e8d8a8;
-  --gold-bg: #faf4e6;
+  /* --- Surfaces --- */
+  --bg: #100d0b; /* page */
+  --bg-2: #16110e; /* alternating sections */
+  --surface: #1c1613; /* cards */
+  --surface-2: #241c17; /* raised surfaces, inputs */
+
+  /* --- Text --- */
+  --ink: #f3ecde; /* headings + body on dark (~14:1 on --bg) */
+  --muted: #a99e8c; /* secondary text (~7:1 on --bg) */
+
+  /* --- Accent (brand gold) --- */
+  --gold: #c9a227; /* rules, borders, large text, UI */
+  --gold-soft: #ebdcb4; /* body-size gold text */
+  --gold-bright: #e3c56b;
+  --on-gold: #20140a; /* text on a gold fill */
+
+  /* --- Depth / borders --- */
+  --border: #2e2620;
+  --border-gold: rgba(201, 162, 39, 0.22);
   --maroon: #5a1a22;
   --maroon-deep: #3f1017;
-  --maroon-soft: #7a2a34;
-  --ink: #2a2024;
-  --muted: #6a5c5f;
-  --paper: #fffdf8;
-  --border: #ece0d0;
+  --wa: #128c7e; /* WhatsApp, brand-locked */
 
-  --sans: 'Segoe UI', system-ui, Roboto, 'Nirmala UI', sans-serif;
-  --serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia,
+  /* --- Back-compat aliases (older class names still reference these) --- */
+  --gold-bg: var(--surface);
+  --paper: var(--surface);
+
+  /* --- Spacing scale (density: spacious) --- */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 7.5rem;
+
+  --maxw: 1200px;
+  --measure: 64ch;
+  --radius: 4px;
+
+  --sans: 'Inter', 'Segoe UI', system-ui, Roboto, 'Nirmala UI', sans-serif;
+  --serif: 'Playfair Display', 'Iowan Old Style', 'Palatino Linotype', Georgia,
     'Nirmala UI', serif;
 
-  color-scheme: light;
-  font: 17px/1.6 var(--sans);
+  color-scheme: dark;
+  font: 17px/1.7 var(--sans);
   color: var(--ink);
-  background: var(--paper);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -28,6 +62,8 @@
 
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--ink);
 }
 
 #root {
@@ -39,15 +75,41 @@ h1,
 h2,
 h3 {
   font-family: var(--serif);
-  color: var(--maroon);
+  color: var(--ink);
   font-weight: 600;
+  line-height: 1.15;
   margin: 0;
+}
+
+h2 {
+  letter-spacing: 0.01em;
 }
 
 p {
   margin: 0;
 }
 
+a {
+  color: var(--gold-soft);
+}
+
 img {
   max-width: 100%;
+}
+
+::selection {
+  background: rgba(201, 162, 39, 0.28);
+  color: #fff;
+}
+
+/* Shared editorial eyebrow label */
+.eyebrow {
+  display: block;
+  margin-bottom: 14px;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
 }
