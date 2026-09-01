@@ -102,6 +102,13 @@ img {
   color: #fff;
 }
 
+/* Route-change focus target (headings / <main> get tabindex=-1 so keyboard
+   and SR users land at the top of the new page). Not keyboard-tabbable, so
+   suppressing the ring here doesn't affect real focus indicators. */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
 /* Shared editorial eyebrow label */
 .eyebrow {
   display: block;
