@@ -235,6 +235,8 @@
 }
 
 /* ---------- 1. Banner / hero ---------- */
+/* Pure CSS — warm maroon glow at the top, a whisper of gold at the base,
+   sinking to near-black at the edges. No image host. */
 .banner {
   position: relative;
   min-height: 88vh;
@@ -242,21 +244,31 @@
   align-items: center;
   justify-content: center;
   padding: clamp(96px, 14vh, 160px) 22px;
-  background-size: cover;
-  background-position: center;
-  background-color: var(--bg);
   text-align: center;
+  background:
+    radial-gradient(
+      ellipse 130% 90% at 50% -12%,
+      rgba(90, 26, 34, 0.5),
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 70% 46% at 50% 112%,
+      rgba(201, 162, 39, 0.13),
+      transparent 70%
+    ),
+    linear-gradient(180deg, #150f0c 0%, var(--bg) 55%);
 }
 
-.banner-overlay {
+.banner::before {
+  content: '';
   position: absolute;
   inset: 0;
   background: radial-gradient(
-      ellipse at 50% 35%,
-      rgba(16, 13, 11, 0.55),
-      rgba(16, 13, 11, 0.9) 78%
-    ),
-    linear-gradient(to bottom, rgba(16, 13, 11, 0.7), rgba(16, 13, 11, 0.94));
+    ellipse at 50% 42%,
+    transparent 34%,
+    rgba(8, 6, 5, 0.55) 100%
+  );
+  pointer-events: none;
 }
 
 .banner-content {
@@ -426,35 +438,62 @@
   margin-bottom: 0;
 }
 
+/* Local product photo behind a dark scrim, so it reads as editorial
+   imagery and the top edge melts into the section. */
+.about-aside {
+  position: relative;
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
 .about-aside img {
   display: block;
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  border: 1px solid var(--border-gold);
-  border-radius: var(--radius);
-  filter: saturate(0.92) brightness(0.92);
+  filter: saturate(0.9) contrast(1.03);
+}
+
+.about-aside::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(16, 13, 11, 0.55),
+      rgba(16, 13, 11, 0.28) 42%,
+      rgba(16, 13, 11, 0.7)
+    ),
+    radial-gradient(
+      ellipse at 50% 32%,
+      transparent 45%,
+      rgba(63, 16, 23, 0.45)
+    );
+  pointer-events: none;
 }
 
 /* ---------- 3. Quote block ---------- */
+/* Pure CSS — a diagonal maroon-to-black wash with a gold-lit far corner. */
 .quote-block {
   position: relative;
   padding: clamp(88px, 12vw, 150px) 22px;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-color: var(--bg-2);
   text-align: center;
-}
-
-.quote-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(16, 13, 11, 0.86),
-    rgba(16, 13, 11, 0.92)
-  );
+  border-top: 1px solid var(--border-gold);
+  border-bottom: 1px solid var(--border-gold);
+  background:
+    radial-gradient(
+      ellipse 90% 120% at 12% 0%,
+      rgba(90, 26, 34, 0.42),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 60% 80% at 100% 100%,
+      rgba(201, 162, 39, 0.1),
+      transparent 62%
+    ),
+    linear-gradient(135deg, #1a1310 0%, var(--bg-2) 58%, var(--bg) 100%);
 }
 
 .quote-block blockquote {
@@ -1028,6 +1067,110 @@
   color: var(--muted);
 }
 
+/* ---- Kundali live preview panel (right column of the split) ---- */
+.kundali-preview {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.kundali-preview-prompt {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.kundali-preview-day {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.kundali-preview-weekday {
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.kundali-preview-weekday span {
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.kundali-preview-stone {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--gold);
+  border-radius: var(--radius);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.kundali-preview-stone:hover {
+  border-color: var(--border-gold);
+  border-left-color: var(--gold);
+  background: var(--surface-2);
+}
+
+.kundali-preview-stone:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.kundali-preview-img {
+  flex: none;
+  width: 66px;
+  height: 66px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--maroon-deep), var(--gold));
+}
+
+.kundali-preview-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.kundali-preview-stone-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.kundali-preview-stone-name {
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  color: var(--ink);
+}
+
+.kundali-preview-stone-name em {
+  font-style: normal;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+
+.kundali-preview-stone-meta {
+  font-size: 0.8rem;
+  color: var(--gold-soft);
+}
+
+.kundali-preview-note {
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--muted);
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
 .ratna-line {
   font-size: 0.95rem;
   color: var(--ink);
@@ -1470,6 +1613,17 @@
     padding-bottom: 28px;
   }
 
+  /* The Kundali preview fills in from the form, so it belongs *below* it
+     on mobile — never squeezed beside it. */
+  .kundali .split-aside {
+    order: 1;
+    border-bottom: none;
+    border-top: 1px solid var(--border-gold);
+    padding-bottom: 0;
+    padding-top: 28px;
+    margin-top: 8px;
+  }
+
   .split-img {
     display: none;
   }
@@ -1514,10 +1668,6 @@
 
   .section {
     padding: var(--space-2xl) 20px;
-  }
-
-  .quote-block {
-    background-attachment: scroll;
   }
 
   .kundali-row {

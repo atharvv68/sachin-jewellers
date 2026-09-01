@@ -3,6 +3,7 @@ import { AnimatePresence, motion, MotionConfig } from 'motion/react'
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import { EclipticGeoMoon } from 'astronomy-engine'
 import {
+  CATEGORIES,
   CATEGORY_TABS,
   byCategory,
   defaultVariant,
@@ -10,6 +11,7 @@ import {
   getProduct,
   hasColours,
   priceFor,
+  products,
 } from './data/stonesData.js'
 import { POLICIES } from './policies'
 import {
@@ -29,17 +31,11 @@ import sjLogo from './assets/sj-logo-final.png'
 import sjMonogram from './assets/sj-monogram-only.png'
 import './App.css'
 
-const BANNER_IMG =
-  'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1920&q=80'
-const QUOTE_IMG =
-  'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=1920&q=80'
-// Editorial side imagery for the desktop two-column sections.
-const ABOUT_IMG =
-  'https://images.unsplash.com/photo-1611085583191-a3b181a88401?auto=format&fit=crop&w=900&q=80'
-// Local product photo — the old Unsplash URL 404'd.
+// Editorial side imagery — local product photos, dropped back with a scrim
+// in CSS. The hero and quote block are pure CSS gradients (see .banner /
+// .quote-block).
+const ABOUT_IMG = '/stones/ruby-stone.png'
 const STONE_IMG = '/stones/emerald-stone.png'
-const KUNDALI_IMG =
-  'https://images.unsplash.com/photo-1615655406736-b37c4fabf923?auto=format&fit=crop&w=900&q=80'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -503,6 +499,13 @@ const TRANSLATIONS = {
       error: 'Please enter a valid date and time of birth.',
       disclaimer:
         'This is a Moon-sign (Rashi-Nakshatra) calculation using astronomical data. For a complete Kundali including Lagna, Dasha and divisional charts, please consult a qualified astrologer.',
+      previewPrompt:
+        'Enter your date of birth to preview the gemstone for that weekday.',
+      previewWeekdayLabel: 'Birth weekday: ',
+      previewPlanetStone: 'Gemstone for {planet}',
+      previewOthers: '{n} more for this planet',
+      previewFullReading:
+        'Add your time of birth and tap “Check My Kundali” for the full reading — Nakshatra, Pada, metal and finger.',
     },
     enquiry: {
       heading: 'Send Us an Enquiry',
@@ -746,6 +749,12 @@ const TRANSLATIONS = {
       error: 'कृपया मान्य जन्म तिथि और समय दर्ज करें।',
       disclaimer:
         'यह खगोलीय आँकड़ों का उपयोग करते हुए चंद्र-राशि (राशि-नक्षत्र) गणना है। लग्न, दशा और वर्ग कुंडली सहित पूर्ण कुंडली के लिए कृपया किसी योग्य ज्योतिषी से परामर्श करें।',
+      previewPrompt: 'उस वार का रत्न देखने के लिए अपनी जन्म तिथि भरें।',
+      previewWeekdayLabel: 'जन्म-वार: ',
+      previewPlanetStone: '{planet} का रत्न',
+      previewOthers: 'इस ग्रह के लिए {n} और',
+      previewFullReading:
+        'जन्म समय भरकर “मेरी कुंडली जाँचें” दबाएँ — पूरा विवरण: नक्षत्र, पाद, धातु और उँगली।',
     },
     enquiry: {
       heading: 'पूछताछ भेजें',
@@ -1342,6 +1351,142 @@ function calcMoonChart({ dob, tob, offsetMinutes }) {
   return { rashiIndex, nakIndex, pada }
 }
 
+/* ---------- Weekday → planet → gemstone (live preview) ---------- */
+
+// Standard Vedic day rulers. One source of truth. The planet string here
+// matches the prefix of stonesData variant.planet ("Sun / सूर्य" → "Sun").
+const WEEKDAYS = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+]
+const WEEKDAYS_HI = [
+  'रविवार',
+  'सोमवार',
+  'मंगलवार',
+  'बुधवार',
+  'गुरुवार',
+  'शुक्रवार',
+  'शनिवार',
+]
+const WEEKDAY_PLANET = {
+  Sunday: 'Sun',
+  Monday: 'Moon',
+  Tuesday: 'Mars',
+  Wednesday: 'Mercury',
+  Thursday: 'Jupiter',
+  Friday: 'Venus',
+  Saturday: 'Saturn',
+}
+
+// 0–6 for a YYYY-MM-DD date (parsed as a local calendar date), or -1.
+function weekdayIndex(dob) {
+  const [y, m, d] = String(dob).split('-').map(Number)
+  if (!y || !m || !d) return -1
+  const when = new Date(y, m - 1, d, 12)
+  return Number.isNaN(when.getTime()) ? -1 : when.getDay()
+}
+
+// Catalogue variants whose ruling planet AND wearing-day both line up with
+// `weekday`. Pure data — no invented stones or mappings. The order is the
+// order stones appear in stonesData.js, so matches[0] is deterministic.
+function stonesForWeekday(weekday) {
+  const planet = WEEKDAY_PLANET[weekday]
+  if (!planet) return []
+  const matches = []
+  for (const product of products) {
+    for (const variant of product.variants) {
+      const planetMatch = variant.planet.split('/')[0].trim() === planet
+      const dayMatch = variant.day
+        .split('/')
+        .map((s) => s.trim())
+        .includes(weekday)
+      if (planetMatch && dayMatch) matches.push({ product, variant })
+    }
+  }
+  return matches
+}
+
+// Right-hand panel of the Kundali section. Fills in as the form is typed:
+// nothing → date → (date + time). One quiet fade per new piece.
+function KundaliPreview({ dob, tob, lang, kt }) {
+  const wdi = dob ? weekdayIndex(dob) : -1
+  const weekday = wdi >= 0 ? WEEKDAYS[wdi] : null
+  const weekdayLabel =
+    wdi >= 0 ? (lang === 'hi' ? WEEKDAYS_HI[wdi] : WEEKDAYS[wdi]) : null
+  const matches = weekday ? stonesForWeekday(weekday) : []
+  // Deterministic: the tradition's primary (Navratna) stone for the planet
+  // if the catalogue has one, else the first match in stonesData.js order.
+  const pick =
+    matches.find((m) => m.product.category === CATEGORIES.NAVRATNA) ||
+    matches[0] ||
+    null
+  const otherCount = Math.max(0, matches.length - 1)
+  const planetName = weekday ? WEEKDAY_PLANET[weekday] : null
+  const planetFull = pick ? pick.variant.planet : planetName
+
+  const fade = {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -6 },
+    transition: { duration: 0.32, ease: EASE },
+  }
+
+  return (
+    <div className="kundali-preview">
+      <AnimatePresence mode="wait" initial={false}>
+        {!weekday ? (
+          <motion.p key="prompt" className="kundali-preview-prompt" {...fade}>
+            {kt.previewPrompt}
+          </motion.p>
+        ) : (
+          <motion.div key="day" className="kundali-preview-day" {...fade}>
+            <p className="kundali-preview-weekday">
+              <span>{kt.previewWeekdayLabel}</span>
+              {weekdayLabel} &middot; {planetFull}
+            </p>
+
+            {pick && (
+              <Link
+                to={`/stone/${pick.product.id}`}
+                className="kundali-preview-stone"
+              >
+                <span className="kundali-preview-img">
+                  <img src={pick.variant.image} alt="" loading="lazy" />
+                </span>
+                <span className="kundali-preview-stone-body">
+                  <span className="kundali-preview-stone-name">
+                    {pick.product.name}{' '}
+                    <em>({pick.variant.hindiName})</em>
+                  </span>
+                  <span className="kundali-preview-stone-meta">
+                    {kt.previewPlanetStone.replace('{planet}', planetName)}
+                    {otherCount > 0
+                      ? ` · ${kt.previewOthers.replace('{n}', otherCount)}`
+                      : ''}
+                  </span>
+                </span>
+              </Link>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence initial={false}>
+        {weekday && tob && (
+          <motion.p key="tob" className="kundali-preview-note" {...fade}>
+            {kt.previewFullReading}
+          </motion.p>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
 function KundaliChecker({ lang }) {
   const t = TRANSLATIONS[lang]
   const kt = t.kundali
@@ -1524,7 +1669,12 @@ function KundaliChecker({ lang }) {
         </div>
         <aside className="split-aside">
           <p className="split-lead">{kt.intro}</p>
-          <img className="split-img" src={KUNDALI_IMG} alt="" loading="lazy" />
+          <KundaliPreview
+            dob={form.dob}
+            tob={form.tob}
+            lang={lang}
+            kt={kt}
+          />
         </aside>
       </div>
     </FadeSection>
@@ -1953,12 +2103,10 @@ function MainSite() {
         {/* 1. Banner */}
         <motion.header
           className="banner"
-          style={{ backgroundImage: `url(${BANNER_IMG})` }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
         >
-          <div className="banner-overlay" />
           <motion.div
             className="banner-content"
             initial={{ opacity: 0, y: 24 }}
@@ -2040,11 +2188,7 @@ function MainSite() {
         </FadeSection>
 
         {/* 4. Philosophy / quote */}
-        <FadeSection
-          className="quote-block"
-          style={{ backgroundImage: `url(${QUOTE_IMG})` }}
-        >
-          <div className="quote-overlay" />
+        <FadeSection className="quote-block">
           <blockquote>{t.quote}</blockquote>
         </FadeSection>
 

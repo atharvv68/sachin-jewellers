@@ -97,6 +97,24 @@ page.on('requestfailed', (r) => {
   }
 })
 
+// Fill the Kundali form and shoot just that section, so the live preview
+// panel's filled-in state is captured (empty state shows on `home`).
+async function shootKundaliFilled() {
+  await page.goto(base + '/', { waitUntil: 'load' })
+  await waitForSplashGone(page)
+  await page.waitForTimeout(400)
+  await page.fill('.kundali-form input[name="dob"]', '1996-07-20')
+  await page.waitForTimeout(500)
+  await page.fill('.kundali-form input[name="tob"]', '09:45')
+  await page.waitForTimeout(600)
+  const section = page.locator('#kundali-checker')
+  await section.scrollIntoViewIfNeeded()
+  await page.waitForTimeout(300)
+  const file = path.join(OUT, 'kundali-filled.png')
+  await section.screenshot({ path: file })
+  console.log('  saved  screenshots/kundali-filled.png  (/ — form filled)')
+}
+
 try {
   for (const [name, route] of ROUTES) {
     await page.goto(base + route, { waitUntil: 'load' })
@@ -107,6 +125,7 @@ try {
     await page.screenshot({ path: file, fullPage: true })
     console.log(`  saved  screenshots/${name}.png  (${route})`)
   }
+  await shootKundaliFilled()
 } finally {
   await browser.close()
   await server.close()
