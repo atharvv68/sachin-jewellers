@@ -109,7 +109,7 @@ export default function CheckoutPage() {
         <p className="cart-empty">
           Your cart is empty, so there is nothing to check out.
         </p>
-        <Link to="/" state={{ view: 'catalogue' }} className="btn btn-solid">
+        <Link to="/catalogue" className="btn btn-solid">
           Browse the catalogue
         </Link>
       </ShopLayout>

@@ -37,7 +37,7 @@ export function ShopHeader() {
       </Link>
       <div className="navbar-right">
         <div className="navbar-links">
-          <Link to="/" state={{ view: 'catalogue' }}>
+          <Link to="/catalogue">
             Catalogue
           </Link>
         </div>

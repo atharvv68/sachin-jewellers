@@ -42,7 +42,7 @@ export default function CartPage() {
       <ShopLayout className="cart-page">
         <h1 className="cart-title">Your cart</h1>
         <p className="cart-empty">Your cart is empty.</p>
-        <Link to="/" state={{ view: 'catalogue' }} className="btn btn-solid">
+        <Link to="/catalogue" className="btn btn-solid">
           Browse the catalogue
         </Link>
       </ShopLayout>
@@ -142,7 +142,7 @@ export default function CartPage() {
           Shipping and any taxes are confirmed before payment.
         </p>
         <div className="cart-summary-actions">
-          <Link to="/" state={{ view: 'catalogue' }} className="btn btn-outline">
+          <Link to="/catalogue" className="btn btn-outline">
             Continue shopping
           </Link>
           <Link to="/checkout" className="btn btn-solid">

@@ -15,7 +15,9 @@ import path from 'node:path'
 
 const ROUTES = [
   ['home', '/'],
-  ['catalogue', '/#catalogue'],
+  ['catalogue-gemstones', '/catalogue'],
+  ['catalogue-rudraksha', '/catalogue?collection=rudraksha'],
+  ['about', '/about'],
   ['stone-zircon', '/stone/zircon'],
   ['stone-ceylon-blue-sapphire', '/stone/ceylon-blue-sapphire'],
   ['stone-ceylon-yellow-sapphire', '/stone/ceylon-yellow-sapphire'],
@@ -40,9 +42,9 @@ const OUT = path.resolve('screenshots')
 const VIEWPORT = { width: 1280, height: 900 }
 
 async function waitForSplashGone(page) {
-  // The homepage plays a ~2s intro splash on first visit.
+  // Wait for intro overlay to finish if present
   await page
-    .waitForSelector('.splash', { state: 'detached', timeout: 5000 })
+    .waitForSelector('.gemstone-intro-overlay', { state: 'detached', timeout: 5000 })
     .catch(() => {})
 }
 
@@ -106,14 +108,15 @@ page.on('requestfailed', (r) => {
 async function shootKundaliFilled() {
   await page.goto(base + '/', { waitUntil: 'load' })
   await waitForSplashGone(page)
-  await page.waitForTimeout(400)
-  await page.fill('.kundali-form input[name="dob"]', '1996-07-20')
   await page.waitForTimeout(500)
-  await page.fill('.kundali-form input[name="tob"]', '09:45')
-  await page.waitForTimeout(600)
   const section = page.locator('#kundali-checker')
   await section.scrollIntoViewIfNeeded()
-  await page.waitForTimeout(300)
+  await page.waitForTimeout(500)
+  await page.fill('.kundali-form input[name="name"]', 'Rahul Sharma')
+  await page.fill('.kundali-form input[name="dob"]', '1996-07-20')
+  await page.waitForTimeout(400)
+  await page.fill('.kundali-form input[name="tob"]', '09:45')
+  await page.waitForTimeout(600)
   const file = path.join(OUT, 'kundali-filled.png')
   await section.screenshot({ path: file })
   console.log('  saved  screenshots/kundali-filled.png  (/ — form filled)')
@@ -122,26 +125,31 @@ async function shootKundaliFilled() {
 try {
   for (const [name, route] of ROUTES) {
     await page.goto(base + route, { waitUntil: 'load' })
-    if (route === '/' || route === '/#catalogue') await waitForSplashGone(page)
+    if (route === '/') await waitForSplashGone(page)
     await page.waitForTimeout(600)
     await revealByScrolling(page)
     const file = path.join(OUT, `${name}.png`)
     await page.screenshot({ path: file, fullPage: true })
     console.log(`  saved  screenshots/${name}.png  (${route})`)
-
-    if (name === 'catalogue') {
-      // Also capture the Rudraksha collection tab view
-      const rudrakshaBtn = page.locator('.collection-card-rudraksha')
-      if (await rudrakshaBtn.isVisible()) {
-        await rudrakshaBtn.click()
-        await page.waitForTimeout(400)
-        await revealByScrolling(page)
-        const rudrakshaFile = path.join(OUT, 'catalogue-rudraksha.png')
-        await page.screenshot({ path: rudrakshaFile, fullPage: true })
-        console.log('  saved  screenshots/catalogue-rudraksha.png  (/#catalogue — rudraksha)')
-      }
-    }
   }
+
+  // Mobile viewport screenshots
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto(base + '/', { waitUntil: 'load' })
+  await waitForSplashGone(page)
+  await page.waitForTimeout(400)
+  await revealByScrolling(page)
+  await page.screenshot({ path: path.join(OUT, 'home-mobile.png'), fullPage: true })
+  console.log('  saved  screenshots/home-mobile.png  (/ — 375px mobile)')
+
+  await page.goto(base + '/catalogue', { waitUntil: 'load' })
+  await page.waitForTimeout(400)
+  await revealByScrolling(page)
+  await page.screenshot({ path: path.join(OUT, 'catalogue-mobile.png'), fullPage: true })
+  console.log('  saved  screenshots/catalogue-mobile.png  (/catalogue — 375px mobile)')
+
+  // Reset viewport for filled kundali form check
+  await page.setViewportSize(VIEWPORT)
   await shootKundaliFilled()
 } finally {
   await browser.close()

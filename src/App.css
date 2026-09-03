@@ -2619,3 +2619,2057 @@
     scroll-behavior: auto;
   }
 }
+
+/* ============================================================================
+ *  NEW LUXURY GEMSTONE-FIRST EXPERIENCE & COMPONENT STYLES
+ * ========================================================================== */
+
+/* ---------- Accessibility Skip Link ---------- */
+.skip-to-content-link {
+  position: absolute;
+  top: -100px;
+  left: 20px;
+  z-index: 9999;
+  padding: 10px 18px;
+  background: var(--gold);
+  color: var(--on-gold);
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: var(--radius);
+  transition: top 0.2s ease;
+}
+
+.skip-to-content-link:focus {
+  top: 20px;
+}
+
+/* ---------- Global Layout Root ---------- */
+.site-root-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.site-main-content {
+  flex: 1;
+}
+
+/* ---------- Top Navbar & Mega Dropdown ---------- */
+.navbar-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(16, 13, 11, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-gold);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar-header.navbar-scrolled {
+  background: rgba(16, 13, 11, 0.97);
+  border-bottom-color: rgba(201, 162, 39, 0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.navbar-container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 14px clamp(16px, 4vw, 48px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.navbar-brand-monogram {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex: none;
+}
+
+.navbar-brand-copy {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.navbar-brand-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.navbar-brand-sub {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.navbar-desktop-nav {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.navbar-link:hover,
+.navbar-link.navbar-link-active {
+  color: var(--gold-soft);
+  background: rgba(201, 162, 39, 0.08);
+}
+
+.navbar-dropdown-wrapper {
+  position: relative;
+}
+
+.navbar-dropdown-toggle {
+  cursor: pointer;
+}
+
+.dropdown-chevron {
+  transition: transform 0.25s ease;
+}
+
+.dropdown-chevron.dropdown-chevron-open {
+  transform: rotate(180deg);
+}
+
+/* Desktop Catalogue Mega-Dropdown */
+.navbar-mega-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 12px;
+  width: 620px;
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-top: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  z-index: 200;
+}
+
+.mega-dropdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.mega-dropdown-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.mega-dropdown-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mega-col-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.mega-col-title {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gold-soft);
+}
+
+.mega-col-caption {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.mega-dropdown-links {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mega-link {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.mega-link:hover {
+  background: rgba(201, 162, 39, 0.12);
+}
+
+.mega-link-name {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: color 0.2s ease;
+}
+
+.mega-link:hover .mega-link-name {
+  color: var(--gold);
+}
+
+.mega-link-meta {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.mega-col-footer-link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.08);
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.mega-col-footer-link:hover {
+  background: rgba(201, 162, 39, 0.18);
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-lang-btn {
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.navbar-lang-btn:hover {
+  color: var(--ink);
+  border-color: var(--gold);
+}
+
+.navbar-cart-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  color: var(--gold-soft);
+  background: transparent;
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.navbar-cart-btn:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(201, 162, 39, 0.08);
+}
+
+.cart-count-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--on-gold);
+  background: var(--gold);
+  border-radius: 999px;
+}
+
+.navbar-hamburger-btn {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: var(--gold-soft);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.navbar-hamburger-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ---------- Mobile Drawer ---------- */
+.mobile-drawer-root {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+}
+
+.mobile-drawer-root:not([aria-hidden="true"]) {
+  pointer-events: auto;
+}
+
+.mobile-drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.mobile-drawer-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(340px, 86vw);
+  background: var(--surface);
+  border-left: 1px solid var(--border-gold);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  overflow-y: auto;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
+}
+
+.mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+}
+
+.mobile-drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.mobile-drawer-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.mobile-drawer-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-drawer-title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.mobile-drawer-tagline {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.mobile-drawer-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.mobile-drawer-close:hover {
+  color: var(--ink);
+  border-color: var(--gold);
+}
+
+.mobile-drawer-nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mobile-drawer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mobile-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.mobile-nav-item:hover {
+  background: rgba(201, 162, 39, 0.12);
+  color: var(--gold-soft);
+}
+
+.mobile-nav-featured-item {
+  background: rgba(201, 162, 39, 0.05);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+}
+
+.mobile-nav-stacked {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mobile-nav-sub {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.mobile-nav-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  background: rgba(201, 162, 39, 0.18);
+  color: var(--gold);
+  border-radius: 999px;
+}
+
+.mobile-drawer-actions {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-drawer-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--wa);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+.mobile-drawer-call-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 0.82rem;
+}
+
+.mobile-drawer-footer {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-drawer-lang-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.mobile-drawer-address {
+  font-size: 0.76rem;
+  color: var(--muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ---------- Cinematic Gemstone Intro Animation ---------- */
+.gemstone-intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #060404;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.intro-skip-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  background: rgba(16, 13, 11, 0.75);
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.intro-skip-btn:hover {
+  color: #fff;
+  border-color: var(--gold);
+  background: rgba(201, 162, 39, 0.25);
+}
+
+.intro-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  max-width: 600px;
+}
+
+.intro-gemstone-stage {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.intro-gemstone-canvas {
+  display: block;
+}
+
+.intro-typography {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.intro-brand-heading {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  font-weight: 700;
+  color: var(--ink);
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8), 0 0 40px rgba(201, 162, 39, 0.35);
+  margin: 0 0 8px;
+}
+
+.intro-tagline-sub {
+  font-family: var(--sans);
+  font-size: clamp(0.72rem, 1.8vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 16px;
+}
+
+.intro-gold-rule {
+  width: 80px;
+  height: 2px;
+  background: var(--gold);
+  margin-bottom: 14px;
+}
+
+.intro-location-caption {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ---------- Gemstone-First Homepage: Hero Section ---------- */
+.gemstone-hero-section {
+  position: relative;
+  min-height: calc(100vh - 76px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(60px, 10vh, 120px) 20px clamp(40px, 8vh, 80px);
+  overflow: hidden;
+  background: radial-gradient(
+      circle at 50% 30%,
+      rgba(201, 162, 39, 0.12) 0%,
+      rgba(16, 13, 11, 0.95) 70%
+    ),
+    var(--bg);
+}
+
+.gemstone-hero-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.gemstone-hero-radial-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 40%, var(--bg) 95%);
+}
+
+.gemstone-hero-container {
+  position: relative;
+  z-index: 2;
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.gemstone-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gemstone-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.1);
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+  margin-bottom: 24px;
+}
+
+.hero-eyebrow-icon {
+  font-size: 0.8rem;
+}
+
+.gemstone-hero-title {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  margin-bottom: 18px;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+}
+
+.gemstone-hero-tagline {
+  font-size: clamp(1rem, 2.2vw, 1.22rem);
+  line-height: 1.68;
+  color: var(--muted);
+  max-width: 680px;
+  margin: 0 auto 32px;
+}
+
+.hero-trust-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 36px;
+}
+
+.trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--gold-soft);
+  background: rgba(201, 162, 39, 0.08);
+  border: 1px solid var(--border-gold);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+.gemstone-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero-btn-primary {
+  padding: 16px 36px;
+  font-size: 0.88rem;
+}
+
+.hero-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 30px;
+  font-size: 0.84rem;
+}
+
+.hero-btn-rudraksha {
+  padding: 15px 28px;
+  font-size: 0.84rem;
+}
+
+/* ---------- Gemstone Categories Grid ---------- */
+.gemstone-categories-section {
+  padding: var(--space-2xl) clamp(20px, 5vw, 56px);
+  background: var(--bg);
+}
+
+.gemstone-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+.gemstone-cat-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gemstone-cat-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.gemstone-cat-card-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32px 24px;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cat-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.cat-card-icon {
+  font-size: 2.2rem;
+}
+
+.cat-card-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.12);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.cat-card-main {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.cat-card-title {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.cat-card-sub {
+  font-size: 0.86rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.cat-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.cat-card-count {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.cat-card-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.gemstone-cat-card:hover .cat-card-arrow {
+  color: var(--gold);
+  transform: translateX(4px);
+}
+
+/* ---------- Gemstone Trust Pillars ---------- */
+.trust-pillars-section {
+  padding: var(--space-2xl) clamp(20px, 5vw, 56px);
+  background: var(--surface);
+  border-top: 1px solid var(--border-gold);
+  border-bottom: 1px solid var(--border-gold);
+}
+
+.trust-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+.trust-pillar-card {
+  padding: 28px 24px;
+  border-left: 3px solid var(--gold);
+  background: rgba(16, 13, 11, 0.6);
+  border-radius: 0 10px 10px 0;
+}
+
+.pillar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.pillar-icon-box {
+  font-size: 2rem;
+}
+
+.pillar-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.12);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.pillar-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gold-soft);
+  margin-bottom: 10px;
+}
+
+.pillar-desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ---------- Sacred Rudraksha Spotlight ---------- */
+.rudraksha-spotlight-section {
+  padding: var(--space-2xl) clamp(20px, 5vw, 56px);
+  background: var(--bg);
+}
+
+.rudraksha-spotlight-card {
+  position: relative;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  background: radial-gradient(
+      circle at 100% 50%,
+      rgba(131, 24, 67, 0.18) 0%,
+      rgba(28, 22, 19, 0.95) 60%
+    ),
+    var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 16px;
+  padding: clamp(32px, 5vw, 56px);
+  overflow: hidden;
+}
+
+.rudraksha-spotlight-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.rudraksha-spotlight-title {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.rudraksha-spotlight-desc {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.rudraksha-feature-pills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.rf-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: var(--gold-soft);
+}
+
+.rf-dot {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.rudraksha-spotlight-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.rudraksha-spotlight-visual {
+  display: flex;
+  justify-content: center;
+}
+
+.rudraksha-bead-visual-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(16, 13, 11, 0.7);
+  border: 1px solid var(--border-gold);
+  border-radius: 12px;
+  padding: 44px 28px;
+  text-align: center;
+  width: 100%;
+  max-width: 320px;
+}
+
+.rudraksha-visual-icon {
+  font-size: 4.5rem;
+}
+
+.rudraksha-visual-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rudraksha-visual-text strong {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--gold-soft);
+}
+
+.rudraksha-visual-text span {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* ---------- Rashi Stone Advisor Section ---------- */
+.rashi-advisor-section {
+  padding: var(--space-2xl) clamp(20px, 5vw, 56px);
+  background: var(--surface);
+  border-top: 1px solid var(--border-gold);
+}
+
+.rashi-advisor-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(24px, 4vw, 48px);
+  max-width: var(--maxw);
+  margin: 0 auto;
+  align-items: start;
+}
+
+.rashi-selector-box {
+  background: var(--bg);
+  border: 1px solid var(--border-gold);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.rashi-box-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gold-soft);
+  margin-bottom: 18px;
+}
+
+.rashi-button-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.rashi-grid-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.rashi-grid-btn:hover {
+  border-color: var(--border-gold);
+  background: rgba(201, 162, 39, 0.08);
+}
+
+.rashi-grid-btn.rashi-btn-active {
+  border-color: var(--gold);
+  background: rgba(201, 162, 39, 0.18);
+  box-shadow: 0 0 16px rgba(201, 162, 39, 0.25);
+}
+
+.rashi-btn-hi {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.rashi-btn-en {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--gold-soft);
+}
+
+.rashi-btn-zodiac {
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+.rashi-result-box {
+  background: var(--bg);
+  border: 1px solid var(--border-gold);
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.rashi-advice-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.rashi-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.rashi-badge-sign {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.12);
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.rashi-active-title {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+
+.rashi-gem-icon {
+  font-size: 2.2rem;
+}
+
+.rashi-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.rashi-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--surface);
+  border-radius: 6px;
+  font-size: 0.88rem;
+}
+
+.detail-label {
+  color: var(--muted);
+}
+
+.detail-value {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.detail-value.highlight-gold {
+  color: var(--gold);
+  font-size: 0.95rem;
+}
+
+.rashi-disclaimer-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.rashi-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ---------- Founder Story Teaser ---------- */
+.founder-teaser-section {
+  padding: var(--space-2xl) clamp(20px, 5vw, 56px);
+  background: var(--bg);
+  border-top: 1px solid var(--border-gold);
+}
+
+.founder-teaser-card {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 16px;
+  padding: clamp(32px, 5vw, 56px);
+}
+
+.founder-teaser-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(32px, 5vw, 56px);
+  align-items: center;
+}
+
+.founder-avatar-frame {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+.founder-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--bg);
+  padding: 12px;
+}
+
+.founder-exp-badge {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--gold);
+  color: var(--on-gold);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  line-height: 1.1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.exp-num {
+  font-size: 0.9rem;
+}
+
+.exp-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.founder-teaser-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.founder-teaser-name {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.founder-teaser-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.founder-teaser-quote {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--gold-soft);
+  margin: 0 0 16px;
+  padding-left: 18px;
+  border-left: 2px solid var(--gold);
+}
+
+.founder-teaser-text {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+
+.founder-teaser-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* ---------- Global Footer ---------- */
+.site-footer {
+  background: #0a0807;
+  border-top: 1px solid var(--border-gold);
+  color: var(--ink);
+}
+
+.footer-top-strip {
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+  background: rgba(16, 13, 11, 0.7);
+}
+
+.footer-trust-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.footer-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-trust-icon {
+  font-size: 1.8rem;
+  flex: none;
+}
+
+.footer-trust-copy {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.35;
+}
+
+.footer-trust-copy strong {
+  font-size: 0.88rem;
+  color: var(--gold-soft);
+}
+
+.footer-trust-copy span {
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.footer-main-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: clamp(24px, 4vw, 48px);
+  padding: 60px clamp(16px, 4vw, 48px);
+}
+
+.footer-brand-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-brand-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  margin-bottom: 16px;
+}
+
+.footer-monogram {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.footer-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-brand-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.footer-brand-subtitle {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.footer-description {
+  font-size: 0.86rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+
+.footer-social-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  color: var(--gold-soft);
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.footer-social-btn:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(201, 162, 39, 0.1);
+}
+
+.footer-links-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-col-title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold-soft);
+  margin-bottom: 18px;
+}
+
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links-list a {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-links-list a:hover {
+  color: var(--gold-soft);
+}
+
+.footer-highlight-link {
+  color: var(--gold) !important;
+  font-weight: 600;
+}
+
+.footer-wa-direct {
+  display: inline-flex;
+  margin-top: 6px;
+  color: #25d366 !important;
+  font-weight: 600;
+}
+
+.footer-contact-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-address-block {
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-address-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.footer-address-line a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.footer-address-line a:hover {
+  color: var(--gold);
+}
+
+.footer-icon {
+  font-size: 1rem;
+  flex: none;
+}
+
+.footer-gst-tag code {
+  color: var(--gold-soft);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8rem;
+}
+
+.footer-bottom-bar {
+  border-top: 1px solid var(--border);
+  padding: 20px 0;
+  background: #060404;
+}
+
+.footer-bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-policies-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-policy-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.76rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.footer-policy-btn:hover {
+  color: var(--gold-soft);
+}
+
+.footer-copyright {
+  font-size: 0.76rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.footer-sub-note {
+  color: var(--gold);
+}
+
+/* ---------- Full About Us Page Styles ---------- */
+.about-page-root {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.about-hero-header {
+  padding: clamp(60px, 8vh, 100px) 20px 40px;
+  text-align: center;
+  background: radial-gradient(
+      circle at 50% 10%,
+      rgba(201, 162, 39, 0.14) 0%,
+      transparent 70%
+    ),
+    var(--bg);
+}
+
+.about-page-title {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.about-page-subtitle {
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  color: var(--muted);
+  max-width: 660px;
+  margin: 0 auto 28px;
+  line-height: 1.65;
+}
+
+.about-gold-divider {
+  width: 80px;
+  height: 2px;
+  background: var(--gold);
+  margin: 0 auto;
+}
+
+.about-narrative-section {
+  padding: var(--space-2xl) clamp(20px, 5vw, 56px);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: clamp(32px, 5vw, 64px);
+  max-width: var(--maxw);
+  margin: 0 auto;
+  align-items: start;
+}
+
+.about-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-para {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(243, 236, 222, 0.88);
+}
+
+.about-aside-card {
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 12px;
+  padding: 36px 28px;
+  text-align: center;
+}
+
+.about-aside-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  object-fit: contain;
+}
+
+.about-aside-title {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.about-aside-tagline {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.about-aside-note {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.about-aside-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gold-soft);
+  background: rgba(201, 162, 39, 0.1);
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+}
+
+.owner-profile-section {
+  padding: var(--space-2xl) clamp(20px, 5vw, 56px);
+  background: var(--surface);
+  border-top: 1px solid var(--border-gold);
+}
+
+.section-header-center {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 40px;
+}
+
+.owner-wa-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 0.8rem;
+}
+
+/* ---------- 2-Collection Catalogue Page Styles ---------- */
+.catalogue-page-root {
+  background: var(--bg);
+  min-height: 80vh;
+}
+
+.catalogue-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 40px;
+}
+
+.catalogue-heading {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.catalogue-subheading {
+  font-size: 1.1rem;
+  color: var(--gold-soft);
+  margin-bottom: 12px;
+}
+
+/* Primary Collections Grid: ONLY 2 — 💎 Gemstones & 📿 Rudraksha */
+.primary-collections-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 880px;
+  margin: 0 auto 40px;
+}
+
+.collection-card {
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 12px;
+  padding: 28px 24px;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.collection-card.is-active {
+  border-color: var(--gold);
+  background: rgba(201, 162, 39, 0.08);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+}
+
+.collection-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.collection-card-icon {
+  font-size: 2.5rem;
+}
+
+.collection-card-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.12);
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 4px;
+}
+
+.collection-card-title {
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.collection-card-tagline {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.collection-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-top: 8px;
+}
+
+/* Secondary Collections Section */
+.secondary-collections-section {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-gold);
+}
+
+.secondary-collections-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.sec-header-title {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.sec-header-sub {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.secondary-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 0.76rem;
+}
+
+.toggle-icon {
+  transition: transform 0.25s ease;
+}
+
+.toggle-icon-open {
+  transform: rotate(180deg);
+}
+
+.secondary-collections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  overflow: hidden;
+}
+
+.secondary-collection-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  transition: border-color 0.2s ease;
+}
+
+.secondary-collection-card:hover {
+  border-color: var(--border-gold);
+}
+
+.sec-card-icon {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.sec-card-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.sec-card-subtitle {
+  font-size: 0.85rem;
+  font-family: var(--sans);
+  color: var(--gold-soft);
+  font-weight: 400;
+}
+
+.sec-card-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.55;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.sec-card-btn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 0.7rem;
+}
+
+/* ---------- Responsive Breakpoints for Redesign ---------- */
+@media (max-width: 992px) {
+  .navbar-desktop-nav {
+    display: none;
+  }
+
+  .navbar-hamburger-btn {
+    display: block;
+  }
+
+  .rudraksha-spotlight-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .founder-teaser-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+  }
+
+  .founder-teaser-quote {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .founder-teaser-actions {
+    justify-content: center;
+  }
+
+  .rashi-advisor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-main-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .primary-collections-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .secondary-collections-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .secondary-toggle-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rashi-button-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .gemstone-hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .gemstone-hero-actions .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .gemstone-cat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-policies-list {
+    justify-content: center;
+  }
+}
+
+

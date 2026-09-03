@@ -136,7 +136,7 @@ function StoneDetail({ product }) {
   return (
     <ShopLayout className="stone-page">
       <nav className="stone-crumbs" aria-label="Breadcrumb">
-        <Link to="/" state={{ view: 'catalogue' }}>
+        <Link to="/catalogue">
           Catalogue
         </Link>
         <span aria-hidden="true">/</span>

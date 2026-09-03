@@ -93,7 +93,7 @@ export default function CheckoutResultPage({ kind }) {
 
       <div className="result-actions">
         {success ? (
-          <Link to="/" state={{ view: 'catalogue' }} className="btn btn-solid">
+          <Link to="/catalogue" className="btn btn-solid">
             Continue shopping
           </Link>
         ) : (
