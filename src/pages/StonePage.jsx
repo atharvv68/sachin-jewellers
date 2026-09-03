@@ -302,10 +302,12 @@ function StoneDetail({ product }) {
               <dt>Finger</dt>
               <dd>{variant.finger}</dd>
             </div>
-            <div>
-              <dt>Certified</dt>
-              <dd>{variant.certified ? 'Yes — lab certified' : 'Not certified'}</dd>
-            </div>
+            {variant.certified && (
+              <div>
+                <dt>Certified</dt>
+                <dd>Yes — lab certified</dd>
+              </div>
+            )}
           </dl>
 
           <p className="stone-short">{variant.short}</p>
