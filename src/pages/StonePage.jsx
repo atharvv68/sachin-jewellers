@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
   byCategory,
+  defaultSize,
   defaultVariant,
+  findSize,
   formatINR,
   getProduct,
   hasColours,
-  priceFor,
+  priceOf,
+  priceRange,
 } from '../data/stonesData.js'
 import { BRAND } from '../shopConfig.js'
 import { useCart } from '../cart/cartContext.js'
@@ -14,8 +17,6 @@ import { NotFound, QuantityStepper, ShopLayout } from './ShopChrome.jsx'
 import './shop.css'
 
 const MAX_QTY = 10
-
-const middleCarat = (opts) => opts[Math.floor(opts.length / 2)]
 
 const variantForColour = (product, colour) => {
   if (!colour) return null
@@ -61,19 +62,15 @@ function StoneDetail({ product }) {
   const fallback = defaultVariant(product)
   const variant = variantForColour(product, searchParams.get('color')) || fallback
 
-  const [caratChoice, setCaratChoice] = useState(() =>
-    middleCarat(variant.caratOptions),
-  )
+  const [sizeChoice, setSizeChoice] = useState(() => defaultSize(variant).label)
   const [qty, setQty] = useState(1)
   const [addedTick, setAddedTick] = useState(0)
 
-  // The active carat, derived: keep the chosen value only while the current
-  // variant offers it, otherwise fall back to that variant's middle option.
+  // The active size, derived: keep the chosen label only while the current
+  // variant offers it, otherwise fall back to that variant's default size.
   // (Derived rather than an effect so a colour switch never leaves a stale
-  // carat selected, even for one render.)
-  const carat = variant.caratOptions.includes(caratChoice)
-    ? caratChoice
-    : middleCarat(variant.caratOptions)
+  // size selected, even for one render.)
+  const size = findSize(variant, sizeChoice) || defaultSize(variant)
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -99,7 +96,7 @@ function StoneDetail({ product }) {
     return () => clearTimeout(t)
   }, [addedTick])
 
-  const unitPrice = priceFor(variant, carat)
+  const unitPrice = priceOf(size)
   const total = unitPrice * qty
 
   const selectColour = (v) => {
@@ -113,7 +110,7 @@ function StoneDetail({ product }) {
   const lineItem = () => ({
     productId: product.id,
     variantSlug: variant.slug,
-    carat,
+    sizeLabel: size.label,
     quantity: qty,
     unitPrice,
   })
@@ -185,9 +182,6 @@ function StoneDetail({ product }) {
 
           <div className="stone-price">
             <span className="stone-price-now">{formatINR(unitPrice)}</span>
-            <span className="stone-price-rate">
-              {formatINR(variant.ratePerCarat)} / carat &middot; {carat} ct
-            </span>
           </div>
 
           {colours && (
@@ -221,18 +215,18 @@ function StoneDetail({ product }) {
 
           <div className="stone-field">
             <p className="stone-field-label">
-              Carat: <strong>{carat} ct</strong>
+              Carat: <strong>{size.label}</strong>
             </p>
             <div className="pill-row" role="group" aria-label="Carat">
-              {variant.caratOptions.map((c) => (
+              {variant.sizes.map((s) => (
                 <button
-                  key={c}
+                  key={s.label}
                   type="button"
-                  className={`pill${c === carat ? ' is-active' : ''}`}
-                  aria-pressed={c === carat}
-                  onClick={() => setCaratChoice(c)}
+                  className={`pill${s.label === size.label ? ' is-active' : ''}`}
+                  aria-pressed={s.label === size.label}
+                  onClick={() => setSizeChoice(s.label)}
                 >
-                  {c} ct
+                  {s.label}
                 </button>
               ))}
             </div>
@@ -321,7 +315,7 @@ function StoneDetail({ product }) {
                       {p.name} <em>({rv.hindiName})</em>
                     </span>
                     <span className="related-from">
-                      from {formatINR(priceFor(rv, Math.min(...rv.caratOptions)))}
+                      from {formatINR(priceRange(rv).from)}
                     </span>
                   </Link>
                 </li>

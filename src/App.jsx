@@ -16,7 +16,7 @@ import {
   formatINR,
   getProduct,
   hasColours,
-  priceFor,
+  priceRange,
   products,
 } from './data/stonesData.js'
 import { POLICIES } from './policies'
@@ -899,7 +899,7 @@ function TrustCard({ heading, children }) {
 // Shows the default variant; the whole card links to that stone's page.
 function ProductCard({ product }) {
   const v = defaultVariant(product)
-  const from = priceFor(v, Math.min(...v.caratOptions))
+  const { from, to } = priceRange(v)
   return (
     <motion.article
       className="product-card"
@@ -917,8 +917,13 @@ function ProductCard({ product }) {
             <span className="product-hi">({v.hindiName})</span>
           </h3>
           <p className="product-price">
-            <span className="price-from">from</span>{' '}
-            <span className="price-now">{formatINR(from)}</span>
+            {from === to ? (
+              <span className="price-now">{formatINR(from)}</span>
+            ) : (
+              <span className="price-now">
+                {formatINR(from)} &ndash; {formatINR(to)}
+              </span>
+            )}
           </p>
           <p className="product-desc">{v.short}</p>
           {hasColours(product) && (

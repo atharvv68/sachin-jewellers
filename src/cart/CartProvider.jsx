@@ -29,13 +29,13 @@ export function CartProvider({ children }) {
             {
               productId: item.productId,
               variantSlug: item.variantSlug,
-              carat: item.carat,
+              sizeLabel: item.sizeLabel,
               quantity: clampQty(item.quantity ?? 1),
               unitPrice: item.unitPrice,
             },
           ]
         }
-        // Same variant + carat already in the cart: bump quantity, keep the
+        // Same variant + size already in the cart: bump quantity, keep the
         // originally captured unit price.
         const next = cur.slice()
         next[idx] = {
@@ -45,19 +45,19 @@ export function CartProvider({ children }) {
         return next
       })
 
-    const setQuantity = (variantSlug, carat, quantity) =>
+    const setQuantity = (variantSlug, sizeLabel, quantity) =>
       setItems((cur) =>
         cur.map((x) =>
-          x.variantSlug === variantSlug && x.carat === carat
+          x.variantSlug === variantSlug && x.sizeLabel === sizeLabel
             ? { ...x, quantity: clampQty(quantity) }
             : x,
         ),
       )
 
-    const removeItem = (variantSlug, carat) =>
+    const removeItem = (variantSlug, sizeLabel) =>
       setItems((cur) =>
         cur.filter(
-          (x) => !(x.variantSlug === variantSlug && x.carat === carat),
+          (x) => !(x.variantSlug === variantSlug && x.sizeLabel === sizeLabel),
         ),
       )
 

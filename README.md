@@ -34,12 +34,14 @@ both Preview and Production; and `.env.local` for local `vercel dev` — see
 1. `/checkout` collects name, phone, email, address, pincode and validates them
    (10-digit Indian mobile, 6-digit pincode).
 2. "Proceed to payment" POSTs **only the cart lines**
-   (`{ items: [{ productId, variantSlug, carat, quantity }], firstname, email, phone }`)
+   (`{ items: [{ productId, variantSlug, sizeLabel, quantity }], firstname, email, phone }`)
    to **`/api/payu-hash`**.
 3. `/api/payu-hash` **recomputes the amount server-side** from `src/data/stonesData.js`
-   (`api/_order.js`) — any `amount`/`price`/`total` in the body is ignored. Unknown
-   `productId`/`variantSlug`, or a `carat` not in that variant's `caratOptions`,
-   fail the request (no fallback). It generates the `txnid`, builds the SHA-512
+   (`api/_order.js`) — it looks up each line's `productId` + `variantSlug` + `sizeLabel`
+   in that variant's `sizes` array and reads `size.price` directly; any
+   `amount`/`price`/`total` in the body is ignored. Unknown `productId`/`variantSlug`,
+   or a `sizeLabel` not in that variant's `sizes`, fail the request (no fallback). It
+   generates the `txnid`, builds the SHA-512
    request hash with the salt, and returns `{ action, fields }` — the exact hidden
    inputs to POST. The client builds nothing.
 4. A hidden form is POSTed to `action` (PayU hosted checkout).

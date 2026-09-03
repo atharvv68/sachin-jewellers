@@ -127,7 +127,7 @@ export default function CheckoutPage() {
           items: items.map((x) => ({
             productId: x.productId,
             variantSlug: x.variantSlug,
-            carat: x.carat,
+            sizeLabel: x.sizeLabel,
             quantity: x.quantity,
           })),
           firstname: values.name.trim(),
@@ -209,7 +209,7 @@ export default function CheckoutPage() {
           <h2>Order summary</h2>
           <ul className="checkout-items">
             {rows.map(({ item, hit }) => {
-              const key = `${item.variantSlug}::${item.carat}`
+              const key = `${item.variantSlug}::${item.sizeLabel}`
               const name = hit ? hit.product.name : item.variantSlug
               return (
                 <li key={key}>
@@ -220,7 +220,7 @@ export default function CheckoutPage() {
                     <span className="checkout-item-name">{name}</span>
                     <span className="checkout-item-meta">
                       {hit?.variant.color ? `${hit.variant.color} · ` : ''}
-                      {item.carat} ct &times; {item.quantity}
+                      {item.sizeLabel} &times; {item.quantity}
                     </span>
                   </span>
                   <span className="checkout-item-line">

@@ -4,15 +4,17 @@
  * Starts a PayU (test) hosted checkout for the current cart.
  *
  * Request (JSON): {
- *   items: [{ productId, variantSlug, carat, quantity }],   // cart lines only
+ *   items: [{ productId, variantSlug, sizeLabel, quantity }],  // cart lines only
  *   firstname, email, phone
  * }
  *
  * The order amount is ALWAYS recomputed here from stonesData.js (see
- * _order.js). Any `amount` / `price` / `total` in the request body is
- * ignored — never read. An unknown productId or variantSlug, or a carat
- * that is not in that variant's caratOptions, fails the request with 400.
- * There is no fallback and no default.
+ * _order.js): each line's productId + variantSlug + sizeLabel is looked up
+ * in that variant's `sizes` array and `size.price` is read directly. Any
+ * `amount` / `price` / `total` in the request body is ignored — never read.
+ * An unknown productId or variantSlug, or a sizeLabel that is not in that
+ * variant's `sizes`, fails the request with 400. There is no fallback and
+ * no default.
  *
  * Response (JSON): { action, fields }
  *   action — PayU's hosted-checkout URL for PAYU_ENV

@@ -38,7 +38,7 @@ export default function CartPage() {
 
       <ul className="cart-list">
         {rows.map(({ item, product, variant }) => {
-          const key = `${item.variantSlug}::${item.carat}`
+          const key = `${item.variantSlug}::${item.sizeLabel}`
           const name = product ? product.name : item.variantSlug
           return (
             <li className="cart-row" key={key}>
@@ -63,13 +63,15 @@ export default function CartPage() {
                 </p>
                 <p className="cart-row-meta">
                   {variant?.color ? `${variant.color} · ` : ''}
-                  {item.carat} ct &middot; {formatINR(item.unitPrice)} each
+                  {item.sizeLabel} &middot; {formatINR(item.unitPrice)} each
                 </p>
 
                 <div className="cart-row-controls">
                   <QuantityStepper
                     value={item.quantity}
-                    onChange={(q) => setQuantity(item.variantSlug, item.carat, q)}
+                    onChange={(q) =>
+                      setQuantity(item.variantSlug, item.sizeLabel, q)
+                    }
                     min={1}
                     max={10}
                     label={`Quantity for ${name}`}
@@ -77,7 +79,7 @@ export default function CartPage() {
                   <button
                     type="button"
                     className="cart-remove"
-                    onClick={() => removeItem(item.variantSlug, item.carat)}
+                    onClick={() => removeItem(item.variantSlug, item.sizeLabel)}
                   >
                     Remove
                   </button>
