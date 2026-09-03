@@ -4,12 +4,17 @@
 //  PRICING MODEL: each variant has an explicit `sizes` array.
 //  Every size is a carat RANGE with its own flat price. Price is
 //  NOT rate x carat — 9 stones (zircon, firoza, coral, topaz,
-//  white opal) are non-linear, so multiplying rate by carat would
-//  give the wrong number. Always read size.price.
+//  white opal) are non-linear, so a per-carat formula would give
+//  the wrong number. Always read size.price.
 //
 //  Rates set by Sachin ji. Each row is a carat range and its
 //  flat price, exactly as on the shop's own rate list.
 //  Example: "4-5 ct" costs Rs 2,240 for the whole stone.
+//
+//  Some sizes also carry `mrp` — the original price before a
+//  discount. When mrp is present, show it struck through next to
+//  price and render a discount badge. When absent, show price alone
+//  with no badge and no fake strikethrough.
 //
 //  image path: /stones/<slug>.png   (in public/stones/)
 // ============================================================
@@ -41,15 +46,15 @@ export const products = [
         certified: true,
         short: "High-dispersion golden zircon with strong fire.",
         sizes: [
-          { label: "2-3 ct", carat: 2, price: 2400 },
-          { label: "3-4 ct", carat: 3, price: 3600 },
-          { label: "4-5 ct", carat: 4, price: 6000 },
-          { label: "5-6 ct", carat: 5, price: 8800 },
-          { label: "6-7 ct", carat: 6, price: 12000 },
-          { label: "7-8 ct", carat: 7, price: 16800 },
-          { label: "8-9 ct", carat: 8, price: 19200 },
-          { label: "9-10 ct", carat: 9, price: 21600 },
-          { label: "10-11 ct", carat: 10, price: 24000 },
+          { label: "2-3 ct", carat: 2, price: 1500, mrp: 3000 },
+          { label: "3-4 ct", carat: 3, price: 2250, mrp: 4500 },
+          { label: "4-5 ct", carat: 4, price: 3750, mrp: 7500 },
+          { label: "5-6 ct", carat: 5, price: 5500, mrp: 11000 },
+          { label: "6-7 ct", carat: 6, price: 7500, mrp: 15000 },
+          { label: "7-8 ct", carat: 7, price: 10500, mrp: 21000 },
+          { label: "8-9 ct", carat: 8, price: 12000, mrp: 24000 },
+          { label: "9-10 ct", carat: 9, price: 13500, mrp: 27000 },
+          { label: "10-11 ct", carat: 10, price: 15000, mrp: 30000 },
         ],
       },
       {
@@ -66,15 +71,15 @@ export const products = [
         certified: true,
         short: "Electric blue zircon, brighter sparkle than neelam.",
         sizes: [
-          { label: "2-3 ct", carat: 2, price: 2400 },
-          { label: "3-4 ct", carat: 3, price: 3600 },
-          { label: "4-5 ct", carat: 4, price: 6000 },
-          { label: "5-6 ct", carat: 5, price: 8800 },
-          { label: "6-7 ct", carat: 6, price: 12000 },
-          { label: "7-8 ct", carat: 7, price: 16800 },
-          { label: "8-9 ct", carat: 8, price: 19200 },
-          { label: "9-10 ct", carat: 9, price: 21600 },
-          { label: "10-11 ct", carat: 10, price: 24000 },
+          { label: "2-3 ct", carat: 2, price: 1500, mrp: 3000 },
+          { label: "3-4 ct", carat: 3, price: 2250, mrp: 4500 },
+          { label: "4-5 ct", carat: 4, price: 3750, mrp: 7500 },
+          { label: "5-6 ct", carat: 5, price: 5500, mrp: 11000 },
+          { label: "6-7 ct", carat: 6, price: 7500, mrp: 15000 },
+          { label: "7-8 ct", carat: 7, price: 10500, mrp: 21000 },
+          { label: "8-9 ct", carat: 8, price: 12000, mrp: 24000 },
+          { label: "9-10 ct", carat: 9, price: 13500, mrp: 27000 },
+          { label: "10-11 ct", carat: 10, price: 15000, mrp: 30000 },
         ],
       },
       {
@@ -92,15 +97,15 @@ export const products = [
         badge: "Diamond Look",
         short: "Colourless zircon — natural stone closest to diamond fire.",
         sizes: [
-          { label: "2-3 ct", carat: 2, price: 2400 },
-          { label: "3-4 ct", carat: 3, price: 3600 },
-          { label: "4-5 ct", carat: 4, price: 6000 },
-          { label: "5-6 ct", carat: 5, price: 8800 },
-          { label: "6-7 ct", carat: 6, price: 12000 },
-          { label: "7-8 ct", carat: 7, price: 16800 },
-          { label: "8-9 ct", carat: 8, price: 19200 },
-          { label: "9-10 ct", carat: 9, price: 21600 },
-          { label: "10-11 ct", carat: 10, price: 24000 },
+          { label: "2-3 ct", carat: 2, price: 1500, mrp: 3000 },
+          { label: "3-4 ct", carat: 3, price: 2250, mrp: 4500 },
+          { label: "4-5 ct", carat: 4, price: 3750, mrp: 7500 },
+          { label: "5-6 ct", carat: 5, price: 5500, mrp: 11000 },
+          { label: "6-7 ct", carat: 6, price: 7500, mrp: 15000 },
+          { label: "7-8 ct", carat: 7, price: 10500, mrp: 21000 },
+          { label: "8-9 ct", carat: 8, price: 12000, mrp: 24000 },
+          { label: "9-10 ct", carat: 9, price: 13500, mrp: 27000 },
+          { label: "10-11 ct", carat: 10, price: 15000, mrp: 30000 },
         ],
       },
     ],
@@ -124,13 +129,13 @@ export const products = [
         certified: true,
         short: "Golden faceted topaz, popular pukhraj substitute.",
         sizes: [
-          { label: "4-5 ct", carat: 4, price: 1200 },
-          { label: "5-6 ct", carat: 5, price: 1200 },
-          { label: "6-7 ct", carat: 6, price: 1440 },
-          { label: "7-8 ct", carat: 7, price: 1680 },
-          { label: "8-9 ct", carat: 8, price: 1920 },
-          { label: "9-10 ct", carat: 9, price: 2160 },
-          { label: "10-11 ct", carat: 10, price: 2400 },
+          { label: "4-5 ct", carat: 4, price: 750, mrp: 1500 },
+          { label: "5-6 ct", carat: 5, price: 750, mrp: 1500 },
+          { label: "6-7 ct", carat: 6, price: 900, mrp: 1800 },
+          { label: "7-8 ct", carat: 7, price: 1050, mrp: 2100 },
+          { label: "8-9 ct", carat: 8, price: 1200, mrp: 2400 },
+          { label: "9-10 ct", carat: 9, price: 1350, mrp: 2700 },
+          { label: "10-11 ct", carat: 10, price: 1500, mrp: 3000 },
         ],
       },
       {
@@ -147,13 +152,13 @@ export const products = [
         certified: true,
         short: "Swiss-blue topaz with high brilliance.",
         sizes: [
-          { label: "4-5 ct", carat: 4, price: 1200 },
-          { label: "5-6 ct", carat: 5, price: 1200 },
-          { label: "6-7 ct", carat: 6, price: 1440 },
-          { label: "7-8 ct", carat: 7, price: 1680 },
-          { label: "8-9 ct", carat: 8, price: 1920 },
-          { label: "9-10 ct", carat: 9, price: 2160 },
-          { label: "10-11 ct", carat: 10, price: 2400 },
+          { label: "4-5 ct", carat: 4, price: 750, mrp: 1500 },
+          { label: "5-6 ct", carat: 5, price: 750, mrp: 1500 },
+          { label: "6-7 ct", carat: 6, price: 900, mrp: 1800 },
+          { label: "7-8 ct", carat: 7, price: 1050, mrp: 2100 },
+          { label: "8-9 ct", carat: 8, price: 1200, mrp: 2400 },
+          { label: "9-10 ct", carat: 9, price: 1350, mrp: 2700 },
+          { label: "10-11 ct", carat: 10, price: 1500, mrp: 3000 },
         ],
       },
       {
@@ -171,13 +176,13 @@ export const products = [
         badge: "Budget",
         short: "Colourless topaz — most affordable diamond substitute.",
         sizes: [
-          { label: "4-5 ct", carat: 4, price: 1200 },
-          { label: "5-6 ct", carat: 5, price: 1200 },
-          { label: "6-7 ct", carat: 6, price: 1440 },
-          { label: "7-8 ct", carat: 7, price: 1680 },
-          { label: "8-9 ct", carat: 8, price: 1920 },
-          { label: "9-10 ct", carat: 9, price: 2160 },
-          { label: "10-11 ct", carat: 10, price: 2400 },
+          { label: "4-5 ct", carat: 4, price: 750, mrp: 1500 },
+          { label: "5-6 ct", carat: 5, price: 750, mrp: 1500 },
+          { label: "6-7 ct", carat: 6, price: 900, mrp: 1800 },
+          { label: "7-8 ct", carat: 7, price: 1050, mrp: 2100 },
+          { label: "8-9 ct", carat: 8, price: 1200, mrp: 2400 },
+          { label: "9-10 ct", carat: 9, price: 1350, mrp: 2700 },
+          { label: "10-11 ct", carat: 10, price: 1500, mrp: 3000 },
         ],
       },
     ],
@@ -893,13 +898,13 @@ export const products = [
         certified: true,
         short: "Deep purple polished amethyst.",
         sizes: [
-          { label: "4-5 ct", carat: 4, price: 1280 },
-          { label: "5-6 ct", carat: 5, price: 1600 },
-          { label: "6-7 ct", carat: 6, price: 1920 },
-          { label: "7-8 ct", carat: 7, price: 2240 },
-          { label: "8-9 ct", carat: 8, price: 2560 },
-          { label: "9-10 ct", carat: 9, price: 2880 },
-          { label: "10-11 ct", carat: 10, price: 3200 },
+          { label: "4-5 ct", carat: 4, price: 800, mrp: 1600 },
+          { label: "5-6 ct", carat: 5, price: 1000, mrp: 2000 },
+          { label: "6-7 ct", carat: 6, price: 1200, mrp: 2400 },
+          { label: "7-8 ct", carat: 7, price: 1400, mrp: 2800 },
+          { label: "8-9 ct", carat: 8, price: 1600, mrp: 3200 },
+          { label: "9-10 ct", carat: 9, price: 1800, mrp: 3600 },
+          { label: "10-11 ct", carat: 10, price: 2000, mrp: 4000 },
         ],
       },
     ],
@@ -1226,6 +1231,11 @@ export const allVariants = products.flatMap((p) =>
     category: p.category,
   }))
 );
+
+export const hasDiscount = (size) => Boolean(size.mrp && size.mrp > size.price);
+
+export const discountPercent = (size) =>
+  hasDiscount(size) ? Math.round((1 - size.price / size.mrp) * 100) : 0;
 
 export const CATEGORY_TABS = [
   "All",

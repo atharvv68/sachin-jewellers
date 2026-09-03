@@ -120,3 +120,33 @@ img {
   text-transform: uppercase;
   color: var(--gold);
 }
+
+/* ============================================================================
+ *  Discount price — struck-through MRP + "N% OFF" badge
+ *  Shown next to a price on the catalogue card, PDP, cart and checkout
+ *  whenever a size carries `mrp`. Never rendered for a size without one.
+ * ========================================================================== */
+.price-was {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 0.82em;
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.price-off {
+  align-self: center;
+  padding: 3px 8px;
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--gold-soft);
+  background: var(--maroon);
+  border: 1px solid var(--border-gold);
+  border-radius: 999px;
+}

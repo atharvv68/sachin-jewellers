@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "intents": {
+    "inline:on-a-gemstone-pdp-choosing-a-carat-size-re-price-52c25eb9": {
+      "id": "inline:on-a-gemstone-pdp-choosing-a-carat-size-re-price-52c25eb9",
+      "statement": "On a gemstone PDP, choosing a carat size re-prices the product to that size's flat price and re-derives the discount: the now-price, the struck-through MRP, and the \"You save\" line must all reflect the selected size (10-11 ct zircon = ₹15,000 now, ₹30,000 MRP, save ₹15,000).",
+      "state": "proved",
+      "declaredAt": 1788426225622,
+      "binding": {
+        "kind": "allOf",
+        "predicates": [
+          {
+            "kind": "text",
+            "contains": "You save ₹15,000"
+          },
+          {
+            "kind": "text",
+            "contains": "₹30,000"
+          }
+        ]
+      },
+      "surface": {
+        "route": "/stone/zircon",
+        "files": [
+          "src/pages/StonePage.jsx"
+        ]
+      },
+      "provenBy": {
+        "verdictId": "reticle_act_and_wait:1788426226135",
+        "grade": "presence",
+        "at": 1788426226135
+      }
+    },
+    "flow:gemstone-discount-pricing": {
+      "id": "flow:gemstone-discount-pricing",
+      "statement": "On a gemstone PDP, selecting a carat size re-prices the product to that size's flat price and re-derives the discount (now-price, struck-through MRP, 'You save' line). 10-11 ct zircon must show ₹15,000 now / ₹30,000 MRP / You save ₹15,000.",
+      "state": "declared",
+      "declaredAt": 1788426253726,
+      "surface": {
+        "flow": "gemstone-discount-pricing"
+      }
+    },
+    "inline:on-the-product-page-the-discount-badge-and-struc-f451b76a": {
+      "id": "inline:on-the-product-page-the-discount-badge-and-struc-f451b76a",
+      "statement": "On the product page, the discount badge and struck-through MRP are driven by the selected carat size, so switching colour preserves them and reflects the new colour in the URL",
+      "state": "proved",
+      "declaredAt": 1788426464667,
+      "binding": {
+        "kind": "allOf",
+        "predicates": [
+          {
+            "kind": "text",
+            "contains": "50% OFF"
+          },
+          {
+            "kind": "text",
+            "contains": "₹15,000"
+          },
+          {
+            "kind": "route",
+            "contains": "color=blue"
+          }
+        ]
+      },
+      "surface": {
+        "route": "/stone/zircon",
+        "files": [
+          "src/pages/StonePage.jsx"
+        ]
+      },
+      "provenBy": {
+        "verdictId": "reticle_act_and_wait:1788426464717",
+        "grade": "presence",
+        "at": 1788426464717
+      }
+    },
+    "inline:in-the-cart-a-discounted-line-shows-the-struck-t-f06f32d7": {
+      "id": "inline:in-the-cart-a-discounted-line-shows-the-struck-t-f06f32d7",
+      "statement": "In the cart, a discounted line shows the struck-through MRP and a percent-off badge, and the cart's total saving is computed from mrp minus the charged price (not a hardcoded amount)",
+      "state": "proved",
+      "declaredAt": 1788426496053,
+      "binding": {
+        "kind": "allOf",
+        "predicates": [
+          {
+            "kind": "text",
+            "contains": "50% OFF"
+          },
+          {
+            "kind": "text",
+            "contains": "You save"
+          },
+          {
+            "kind": "text",
+            "contains": "₹15,000"
+          },
+          {
+            "kind": "text",
+            "contains": "₹7,500"
+          },
+          {
+            "kind": "route",
+            "pathname": "/cart"
+          }
+        ]
+      },
+      "surface": {
+        "route": "/cart"
+      },
+      "provenBy": {
+        "verdictId": "reticle_assert:1788426496085",
+        "grade": "presence",
+        "at": 1788426496085
+      }
+    },
+    "inline:a-stone-whose-sizes-carry-no-mrp-shows-the-price-4330d31a": {
+      "id": "inline:a-stone-whose-sizes-carry-no-mrp-shows-the-price-4330d31a",
+      "statement": "A stone whose sizes carry no mrp shows the price alone on its product page — no percent-off badge and no struck-through 'was' price is ever fabricated",
+      "state": "proved",
+      "declaredAt": 1788426517426,
+      "binding": {
+        "kind": "allOf",
+        "predicates": [
+          {
+            "kind": "route",
+            "pathname": "/stone/ruby-stone"
+          },
+          {
+            "kind": "text",
+            "contains": "Total"
+          },
+          {
+            "kind": "text",
+            "contains": "% OFF",
+            "absent": true
+          },
+          {
+            "kind": "text",
+            "contains": "You save",
+            "absent": true
+          }
+        ]
+      },
+      "surface": {
+        "route": "/stone/ruby-stone"
+      },
+      "provenBy": {
+        "verdictId": "reticle_assert:1788426517460",
+        "grade": "presence",
+        "at": 1788426517460
+      }
+    }
+  }
+}

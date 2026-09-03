@@ -13,9 +13,11 @@ import {
   CATEGORY_TABS,
   byCategory,
   defaultVariant,
+  discountPercent,
   formatINR,
   getProduct,
   hasColours,
+  hasDiscount,
   priceRange,
   products,
 } from './data/stonesData.js'
@@ -900,6 +902,16 @@ function TrustCard({ heading, children }) {
 function ProductCard({ product }) {
   const v = defaultVariant(product)
   const { from, to } = priceRange(v)
+
+  // A card shows a price range, so it only carries a discount when every
+  // size of the default variant is discounted. The badge needs a single
+  // number, so require the percentage to match across all sizes too.
+  const onOffer = v.sizes.every(hasDiscount)
+  const mrpFrom = onOffer ? Math.min(...v.sizes.map((s) => s.mrp)) : 0
+  const mrpTo = onOffer ? Math.max(...v.sizes.map((s) => s.mrp)) : 0
+  const pct = onOffer ? discountPercent(v.sizes[0]) : 0
+  const uniformPct = onOffer && v.sizes.every((s) => discountPercent(s) === pct)
+
   return (
     <motion.article
       className="product-card"
@@ -917,13 +929,27 @@ function ProductCard({ product }) {
             <span className="product-hi">({v.hindiName})</span>
           </h3>
           <p className="product-price">
-            {from === to ? (
-              <span className="price-now">{formatINR(from)}</span>
-            ) : (
-              <span className="price-now">
-                {formatINR(from)} &ndash; {formatINR(to)}
-              </span>
+            <span className="price-now">
+              {from === to ? (
+                formatINR(from)
+              ) : (
+                <>
+                  {formatINR(from)} &ndash; {formatINR(to)}
+                </>
+              )}
+            </span>
+            {onOffer && (
+              <s className="price-was">
+                {mrpFrom === mrpTo ? (
+                  formatINR(mrpFrom)
+                ) : (
+                  <>
+                    {formatINR(mrpFrom)} &ndash; {formatINR(mrpTo)}
+                  </>
+                )}
+              </s>
             )}
+            {uniformPct && <span className="price-off">{pct}% OFF</span>}
           </p>
           <p className="product-desc">{v.short}</p>
           {hasColours(product) && (

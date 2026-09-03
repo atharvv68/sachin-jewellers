@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "name": "gemstone-discount-pricing",
+  "projectId": "my-site-c5f182e2",
+  "createdAt": 1788426253726,
+  "steps": [
+    {
+      "tool": "reticle_act_sequence",
+      "anchor": {
+        "kind": "role",
+        "role": "button",
+        "name": "2-3 ct"
+      },
+      "steps": [
+        {
+          "tool": "reticle_act",
+          "anchor": {
+            "kind": "role",
+            "role": "button",
+            "name": "2-3 ct"
+          },
+          "args": {},
+          "action": "click"
+        }
+      ]
+    },
+    {
+      "tool": "reticle_act",
+      "anchor": {
+        "kind": "role",
+        "role": "button",
+        "name": "10-11 ct"
+      },
+      "args": {},
+      "action": "click"
+    }
+  ],
+  "startPath": "/stone/zircon",
+  "intent": "On a gemstone PDP, selecting a carat size re-prices the product to that size's flat price and re-derives the discount (now-price, struck-through MRP, 'You save' line). 10-11 ct zircon must show ₹15,000 now / ₹30,000 MRP / You save ₹15,000.",
+  "intentId": "flow:gemstone-discount-pricing"
+}

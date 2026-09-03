@@ -822,7 +822,8 @@
 .product-price {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 4px 8px;
 }
 .price-from {
   font-size: 0.72rem;

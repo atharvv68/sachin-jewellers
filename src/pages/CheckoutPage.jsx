@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { formatINR, getVariantBySlug } from '../data/stonesData.js'
+import {
+  discountPercent,
+  findSize,
+  formatINR,
+  getVariantBySlug,
+  hasDiscount,
+} from '../data/stonesData.js'
 import { BRAND } from '../shopConfig.js'
 import { useCart } from '../cart/cartContext.js'
 import { ShopLayout } from './ShopChrome.jsx'
@@ -82,10 +88,19 @@ export default function CheckoutPage() {
   const errors = useMemo(() => validate(values), [values])
   const isValid = Object.keys(errors).length === 0
 
-  const rows = items.map((item) => ({
-    item,
-    hit: getVariantBySlug(item.variantSlug),
-  }))
+  const rows = items.map((item) => {
+    const hit = getVariantBySlug(item.variantSlug)
+    const size = hit ? findSize(hit.variant, item.sizeLabel) : null
+    return { item, hit, size }
+  })
+
+  const savings = rows.reduce(
+    (sum, { item, size }) =>
+      size && hasDiscount(size)
+        ? sum + (size.mrp - item.unitPrice) * item.quantity
+        : sum,
+    0,
+  )
 
   if (items.length === 0) {
     return (
@@ -208,9 +223,10 @@ export default function CheckoutPage() {
         <aside className="checkout-summary">
           <h2>Order summary</h2>
           <ul className="checkout-items">
-            {rows.map(({ item, hit }) => {
+            {rows.map(({ item, hit, size }) => {
               const key = `${item.variantSlug}::${item.sizeLabel}`
               const name = hit ? hit.product.name : item.variantSlug
+              const discounted = size ? hasDiscount(size) : false
               return (
                 <li key={key}>
                   <span className="checkout-item-img">
@@ -219,11 +235,23 @@ export default function CheckoutPage() {
                   <span className="checkout-item-text">
                     <span className="checkout-item-name">{name}</span>
                     <span className="checkout-item-meta">
-                      {hit?.variant.color ? `${hit.variant.color} · ` : ''}
-                      {item.sizeLabel} &times; {item.quantity}
+                      <span>
+                        {hit?.variant.color ? `${hit.variant.color} · ` : ''}
+                        {item.sizeLabel} &times; {item.quantity}
+                      </span>
+                      {discounted && (
+                        <span className="price-off">
+                          {discountPercent(size)}% OFF
+                        </span>
+                      )}
                     </span>
                   </span>
                   <span className="checkout-item-line">
+                    {discounted && (
+                      <s className="price-was">
+                        {formatINR(size.mrp * item.quantity)}
+                      </s>
+                    )}
                     {formatINR(item.unitPrice * item.quantity)}
                   </span>
                 </li>
@@ -231,6 +259,12 @@ export default function CheckoutPage() {
             })}
           </ul>
 
+          {savings > 0 && (
+            <div className="checkout-save">
+              <span>You save</span>
+              <span>{formatINR(savings)}</span>
+            </div>
+          )}
           <div className="checkout-total">
             <span>Total</span>
             <span className="checkout-total-amt">{formatINR(subtotal)}</span>

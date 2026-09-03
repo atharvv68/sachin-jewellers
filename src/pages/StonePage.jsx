@@ -4,10 +4,12 @@ import {
   byCategory,
   defaultSize,
   defaultVariant,
+  discountPercent,
   findSize,
   formatINR,
   getProduct,
   hasColours,
+  hasDiscount,
   priceOf,
   priceRange,
 } from '../data/stonesData.js'
@@ -182,6 +184,12 @@ function StoneDetail({ product }) {
 
           <div className="stone-price">
             <span className="stone-price-now">{formatINR(unitPrice)}</span>
+            {hasDiscount(size) && (
+              <>
+                <s className="price-was">{formatINR(size.mrp)}</s>
+                <span className="price-off">{discountPercent(size)}% OFF</span>
+              </>
+            )}
           </div>
 
           {colours && (
@@ -245,6 +253,12 @@ function StoneDetail({ product }) {
                 {qty} &times; {formatINR(unitPrice)}
               </span>
             )}
+            {hasDiscount(size) && (
+              <span className="stone-total-save">
+                <s className="price-was">{formatINR(size.mrp * qty)}</s>
+                You save {formatINR((size.mrp - unitPrice) * qty)}
+              </span>
+            )}
           </div>
 
           <div className="stone-actions">
@@ -305,6 +319,13 @@ function StoneDetail({ product }) {
           <ul className="related-grid">
             {related.map((p) => {
               const rv = defaultVariant(p)
+              const rvOffer = rv.sizes.every(hasDiscount)
+              const rvMrpFrom = rvOffer
+                ? Math.min(...rv.sizes.map((s) => s.mrp))
+                : 0
+              const rvPct = rvOffer ? discountPercent(rv.sizes[0]) : 0
+              const rvUniformPct =
+                rvOffer && rv.sizes.every((s) => discountPercent(s) === rvPct)
               return (
                 <li key={p.id}>
                   <Link to={`/stone/${p.id}`} className="related-card">
@@ -315,7 +336,13 @@ function StoneDetail({ product }) {
                       {p.name} <em>({rv.hindiName})</em>
                     </span>
                     <span className="related-from">
-                      from {formatINR(priceRange(rv).from)}
+                      <span>from {formatINR(priceRange(rv).from)}</span>
+                      {rvOffer && (
+                        <s className="price-was">{formatINR(rvMrpFrom)}</s>
+                      )}
+                      {rvUniformPct && (
+                        <span className="price-off">{rvPct}% OFF</span>
+                      )}
                     </span>
                   </Link>
                 </li>

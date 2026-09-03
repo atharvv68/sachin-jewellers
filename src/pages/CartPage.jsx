@@ -1,6 +1,12 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { formatINR, getVariantBySlug } from '../data/stonesData.js'
+import {
+  discountPercent,
+  findSize,
+  formatINR,
+  getVariantBySlug,
+  hasDiscount,
+} from '../data/stonesData.js'
 import { BRAND } from '../shopConfig.js'
 import { useCart } from '../cart/cartContext.js'
 import { QuantityStepper, ShopLayout } from './ShopChrome.jsx'
@@ -17,8 +23,19 @@ export default function CartPage() {
   // (data changed since it was added) still renders, as a removable row.
   const rows = items.map((item) => {
     const hit = getVariantBySlug(item.variantSlug)
-    return { item, product: hit?.product ?? null, variant: hit?.variant ?? null }
+    const variant = hit?.variant ?? null
+    const size = variant ? findSize(variant, item.sizeLabel) : null
+    return { item, product: hit?.product ?? null, variant, size }
   })
+
+  // Total saved against MRP, summed over the lines that are discounted.
+  const savings = rows.reduce(
+    (sum, { item, size }) =>
+      size && hasDiscount(size)
+        ? sum + (size.mrp - item.unitPrice) * item.quantity
+        : sum,
+    0,
+  )
 
   if (items.length === 0) {
     return (
@@ -37,9 +54,10 @@ export default function CartPage() {
       <h1 className="cart-title">Your cart</h1>
 
       <ul className="cart-list">
-        {rows.map(({ item, product, variant }) => {
+        {rows.map(({ item, product, variant, size }) => {
           const key = `${item.variantSlug}::${item.sizeLabel}`
           const name = product ? product.name : item.variantSlug
+          const discounted = size ? hasDiscount(size) : false
           return (
             <li className="cart-row" key={key}>
               <span className="cart-row-img">
@@ -62,8 +80,18 @@ export default function CartPage() {
                   )}
                 </p>
                 <p className="cart-row-meta">
-                  {variant?.color ? `${variant.color} · ` : ''}
-                  {item.sizeLabel} &middot; {formatINR(item.unitPrice)} each
+                  <span>
+                    {variant?.color ? `${variant.color} · ` : ''}
+                    {item.sizeLabel} &middot; {formatINR(item.unitPrice)} each
+                  </span>
+                  {discounted && (
+                    <>
+                      <s className="price-was">{formatINR(size.mrp)}</s>
+                      <span className="price-off">
+                        {discountPercent(size)}% OFF
+                      </span>
+                    </>
+                  )}
                 </p>
 
                 <div className="cart-row-controls">
@@ -87,6 +115,11 @@ export default function CartPage() {
               </div>
 
               <span className="cart-row-line">
+                {discounted && (
+                  <s className="price-was">
+                    {formatINR(size.mrp * item.quantity)}
+                  </s>
+                )}
                 {formatINR(item.unitPrice * item.quantity)}
               </span>
             </li>
@@ -95,6 +128,12 @@ export default function CartPage() {
       </ul>
 
       <div className="cart-summary">
+        {savings > 0 && (
+          <div className="cart-summary-save">
+            <span>You save</span>
+            <span>{formatINR(savings)}</span>
+          </div>
+        )}
         <div className="cart-summary-total">
           <span>Order total</span>
           <span className="cart-summary-amt">{formatINR(subtotal)}</span>

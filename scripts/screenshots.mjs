@@ -15,12 +15,16 @@ import path from 'node:path'
 
 const ROUTES = [
   ['home', '/'],
+  ['catalogue', '/#catalogue'],
   ['stone-zircon', '/stone/zircon'],
+  ['stone-ceylon-blue-sapphire', '/stone/ceylon-blue-sapphire'],
+  ['stone-ceylon-yellow-sapphire', '/stone/ceylon-yellow-sapphire'],
+  ['stone-pitambari-neelam', '/stone/pitambari-neelam'],
   ['cart', '/cart'],
   ['checkout', '/checkout'],
   [
     'checkout-success',
-    '/checkout/success?txnid=SJDEMO123&amount=149600.00&pinfo=Sachin+Jewellers+order+-+3+items&pid=PAYU00099',
+    '/checkout/success?txnid=SJDEMO123&amount=207500.00&pinfo=Sachin+Jewellers+order+-+3+items&pid=PAYU00099',
   ],
   ['checkout-failure', '/checkout/failure?txnid=SJDEMO123&reason=User+cancelled'],
 ]
@@ -29,7 +33,7 @@ const ROUTES = [
 // empty states. Shape must match src/cart/cartContext.js.
 const SEED_CART = [
   { productId: 'burma-ruby', variantSlug: 'burma-ruby', sizeLabel: '5-6 ct', quantity: 1, unitPrice: 200000 },
-  { productId: 'zircon', variantSlug: 'zireon-blue', sizeLabel: '4-5 ct', quantity: 2, unitPrice: 6000 },
+  { productId: 'zircon', variantSlug: 'zireon-blue', sizeLabel: '4-5 ct', quantity: 2, unitPrice: 3750 },
 ]
 
 const OUT = path.resolve('screenshots')
