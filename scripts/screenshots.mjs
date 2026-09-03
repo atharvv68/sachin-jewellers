@@ -122,12 +122,25 @@ async function shootKundaliFilled() {
 try {
   for (const [name, route] of ROUTES) {
     await page.goto(base + route, { waitUntil: 'load' })
-    if (route === '/') await waitForSplashGone(page)
+    if (route === '/' || route === '/#catalogue') await waitForSplashGone(page)
     await page.waitForTimeout(600)
     await revealByScrolling(page)
     const file = path.join(OUT, `${name}.png`)
     await page.screenshot({ path: file, fullPage: true })
     console.log(`  saved  screenshots/${name}.png  (${route})`)
+
+    if (name === 'catalogue') {
+      // Also capture the Rudraksha collection tab view
+      const rudrakshaBtn = page.locator('.collection-card-rudraksha')
+      if (await rudrakshaBtn.isVisible()) {
+        await rudrakshaBtn.click()
+        await page.waitForTimeout(400)
+        await revealByScrolling(page)
+        const rudrakshaFile = path.join(OUT, 'catalogue-rudraksha.png')
+        await page.screenshot({ path: rudrakshaFile, fullPage: true })
+        console.log('  saved  screenshots/catalogue-rudraksha.png  (/#catalogue — rudraksha)')
+      }
+    }
   }
   await shootKundaliFilled()
 } finally {

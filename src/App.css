@@ -644,6 +644,173 @@
 }
 
 /* ---------- Catalogue ---------- */
+.catalogue-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto var(--space-xl);
+}
+
+.catalogue-subheading {
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+  color: var(--gold-soft);
+  margin-top: 4px;
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+}
+
+/* Primary Collections Selector: ONLY 2 — 💎 GEMSTONES & 📿 RUDRAKSHA */
+.primary-collections-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(16px, 3vw, 28px);
+  max-width: 960px;
+  margin: 0 auto var(--space-2xl);
+}
+
+.collection-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.collection-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+}
+
+.collection-card:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.collection-card.is-active {
+  border-color: var(--gold);
+  background: linear-gradient(145deg, rgba(36, 28, 23, 0.95), rgba(28, 22, 19, 0.98));
+  box-shadow: 0 0 0 1px var(--gold), 0 16px 48px rgba(201, 162, 39, 0.16);
+}
+
+.collection-card-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 240px;
+  padding: clamp(20px, 3.5vw, 32px);
+  position: relative;
+  z-index: 1;
+}
+
+/* Subtle luxury accent gradients behind each collection card */
+.collection-card-gemstones::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% 15%, rgba(201, 162, 39, 0.12), transparent 60%);
+  pointer-events: none;
+}
+
+.collection-card-rudraksha::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% 15%, rgba(139, 69, 19, 0.15), transparent 60%);
+  pointer-events: none;
+}
+
+.collection-card.is-active.collection-card-gemstones::before {
+  background: radial-gradient(circle at 85% 15%, rgba(201, 162, 39, 0.22), transparent 70%);
+}
+
+.collection-card.is-active.collection-card-rudraksha::before {
+  background: radial-gradient(circle at 85% 15%, rgba(184, 115, 51, 0.22), transparent 70%);
+}
+
+.collection-card-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+.collection-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.collection-card-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 4px 10px;
+  margin-bottom: 12px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.1);
+  border: 1px solid rgba(201, 162, 39, 0.25);
+  border-radius: 999px;
+}
+
+.collection-card.is-active .collection-card-badge {
+  background: rgba(201, 162, 39, 0.18);
+  border-color: var(--gold);
+}
+
+.collection-card-title {
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.collection-card.is-active .collection-card-title {
+  color: #fff;
+}
+
+.collection-card-tagline {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.collection-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.collection-card:hover .collection-card-cta {
+  color: var(--gold);
+  transform: translateX(4px);
+}
+
+.collection-card.is-active .collection-card-cta {
+  color: var(--gold);
+  font-weight: 700;
+}
+
 /* Category filter tabs above the grid (from CATEGORY_TABS in stonesData.js). */
 .catalogue-filter {
   display: flex;
@@ -688,6 +855,294 @@
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: clamp(20px, 3vw, 34px);
   margin-top: 10px;
+}
+
+/* ---------- Rudraksha Showcase ---------- */
+.rudraksha-collection-view {
+  margin-top: var(--space-md);
+}
+
+.rudraksha-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: clamp(20px, 3vw, 32px);
+  margin-bottom: var(--space-2xl);
+}
+
+.rudraksha-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 24px 22px;
+  text-align: left;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.rudraksha-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.rudraksha-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.rudraksha-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(201, 162, 39, 0.08);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.rudraksha-origin {
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.rudraksha-card-body {
+  flex: 1;
+}
+
+.rudraksha-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+.rudraksha-subname {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--gold-soft);
+  display: inline-block;
+  margin-left: 4px;
+}
+
+.rudraksha-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.rudraksha-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.rudraksha-price-label {
+  font-size: 0.8rem;
+  color: var(--gold-soft);
+  font-style: italic;
+}
+
+.rudraksha-enquire-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Rudraksha Consultation Banner */
+.rudraksha-consult-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: clamp(24px, 4vw, 36px);
+  background: linear-gradient(135deg, rgba(46, 26, 16, 0.6), rgba(28, 22, 19, 0.9));
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  margin-bottom: var(--space-xl);
+}
+
+.rudraksha-consult-body {
+  max-width: 640px;
+}
+
+.rudraksha-consult-body h3 {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  color: var(--gold-soft);
+  margin-bottom: 8px;
+}
+
+.rudraksha-consult-body p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.rudraksha-consult-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ---------- Preserved Secondary Collections Section ---------- */
+.more-collections-section {
+  margin-top: var(--space-3xl);
+  padding-top: var(--space-2xl);
+  border-top: 1px solid var(--border-gold);
+}
+
+.more-collections-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto var(--space-xl);
+}
+
+.more-collections-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.more-collections-title {
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.more-collections-intro {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.secondary-collections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: clamp(16px, 2.5vw, 24px);
+}
+
+.secondary-collection-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px 18px;
+  text-align: left;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.secondary-collection-card:hover {
+  border-color: var(--border-gold);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.sec-card-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.sec-card-body {
+  flex: 1;
+}
+
+.sec-card-title {
+  font-family: var(--serif);
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.sec-card-subtitle {
+  font-size: 0.84rem;
+  font-weight: 400;
+  color: var(--gold-soft);
+  display: inline-block;
+}
+
+.sec-card-desc {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.sec-card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.sec-card-action:hover {
+  color: var(--gold);
+  transform: translateX(3px);
+}
+
+.sec-card-action svg {
+  transition: transform 0.2s ease;
+}
+
+.sec-card-action:hover svg {
+  transform: translateX(2px);
+}
+
+@media (max-width: 768px) {
+  .primary-collections-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rudraksha-consult-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .rudraksha-consult-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* ---------- Automatic SJ monogram watermark ----------

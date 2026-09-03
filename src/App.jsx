@@ -302,11 +302,35 @@ const TRANSLATIONS = {
     brand: 'Sachin Jewellers',
     nav: { about: 'About Us', catalogue: 'Catalogue' },
     catalogue: {
-      heading: 'Our Catalogue',
+      heading: 'Catalogue',
+      subheading: 'Explore Our Collections',
       intro:
-        'A selection of gemstones, rudraksha and bracelets currently available. Tap “Enquire” for price confirmation, certification details and worldwide shipping.',
+        'Ethically sourced natural gemstones and authentic energised rudraksha. Tap “Enquire” for certification details, custom sizing, and worldwide shipping.',
+      viewingNow: 'Active Collection',
       priceOnRequest: 'Price on request',
-      enquire: 'Enquire',
+      enquire: 'Enquire on WhatsApp',
+      gemstones: {
+        title: 'Gemstones',
+        tagline: 'Fine gemstones and precious/semi-precious stones',
+        badge: 'Primary Collection · 31+ Stones',
+        explore: 'Browse Gemstones',
+      },
+      rudraksha: {
+        title: 'Rudraksha',
+        tagline: 'Rudraksha malas, bracelets, pendants and related products',
+        badge: 'Sacred Collection · 1–14 Mukhi',
+        explore: 'Browse Rudraksha',
+      },
+      rudrakshaConsultTitle: 'Personal Rudraksha & Astrological Consultation',
+      rudrakshaConsultDesc:
+        'Every natural Rudraksha bead carries distinct planetary and spiritual resonance. Consult directly with Sachin ji to select and energise the right Mukhi for your horoscope.',
+      rudrakshaConsultBtn: 'Consult on WhatsApp',
+      moreCollections: {
+        eyebrow: 'Secondary Collections',
+        heading: 'More Collections & Sacred Articles',
+        intro:
+          'In addition to our core gemstone and rudraksha house, we curate and craft authentic astrological, temple and worship essentials upon custom request.',
+      },
       waMessage:
         'Hello Sachin Jewellers! I am interested in this product: {product} ({price}). Please share more details.',
     },
@@ -551,11 +575,35 @@ const TRANSLATIONS = {
     brand: 'सचिन ज्वैलर्स',
     nav: { about: 'हमारे बारे में', catalogue: 'कैटलॉग' },
     catalogue: {
-      heading: 'हमारा कैटलॉग',
+      heading: 'कैटलॉग',
+      subheading: 'हमारे संग्रह',
       intro:
-        'अभी उपलब्ध रत्न, रुद्राक्ष और ब्रेसलेट का चयन। दाम की पुष्टि, प्रमाणपत्र और दुनिया भर में शिपिंग के लिए “पूछें” पर टैप करें।',
+        'प्राकृतिक शुद्धता, प्रामाणिक उत्पत्ति और वैदिक ऊर्जा से युक्त संग्रह। प्रमाणन विवरण, कस्टम आकार और डिलीवरी के लिए व्हाट्सएप पर संपर्क करें।',
+      viewingNow: 'सक्रिय संग्रह',
       priceOnRequest: 'दाम पूछें',
-      enquire: 'पूछें',
+      enquire: 'व्हाट्सएप पर पूछें',
+      gemstones: {
+        title: 'रत्न (Gemstones)',
+        tagline: 'दुर्लभ एवं प्राकृतिक रत्न — नवरत्न, उपरत्न एवं सेमी-प्रेशियस',
+        badge: 'मुख्य संग्रह · 31+ रत्न',
+        explore: 'रत्न देखें',
+      },
+      rudraksha: {
+        title: 'रुद्राक्ष (Rudraksha)',
+        tagline: 'प्राकृतिक एवं सिद्ध रुद्राक्ष माला, कंगन, पेंडेंट एवं संबंधित उत्पाद',
+        badge: 'पवित्र संग्रह · 1–14 मुखी',
+        explore: 'रुद्राक्ष देखें',
+      },
+      rudrakshaConsultTitle: 'व्यक्तिगत रुद्राक्ष एवं ज्योतिषीय परामर्श',
+      rudrakshaConsultDesc:
+        'प्रत्येक प्राकृतिक रुद्राक्ष में विशिष्ट ग्रहीय और आध्यात्मिक ऊर्जा होती है। अपनी कुंडली के अनुकूल सही मुखी रुद्राक्ष चुनने हेतु सचिन जी से परामर्श लें।',
+      rudrakshaConsultBtn: 'व्हाट्सएप पर परामर्श लें',
+      moreCollections: {
+        eyebrow: 'अन्य संग्रह',
+        heading: 'अन्य पारंपरिक एवं पूजा संग्रह',
+        intro:
+          'हमारे मुख्य रत्न एवं रुद्राक्ष संग्रह के अतिरिक्त, हम विशेष ऑर्डर पर प्रामाणिक ज्योतिषीय, मंदिर एवं पूजा सामग्री भी उपलब्ध कराते हैं।',
+      },
       waMessage:
         'नमस्ते सचिन ज्वैलर्स! मुझे इस उत्पाद में रुचि है: {product} ({price})। कृपया और जानकारी दें।',
     },
@@ -957,6 +1005,284 @@ function ProductCard({ product }) {
           )}
         </div>
       </Link>
+    </motion.article>
+  )
+}
+
+/* ---------- Rudraksha Products (Secondary primary collection) ---------- */
+const RUDRAKSHA_PRODUCTS = [
+  {
+    id: 'rudraksha-mukhi',
+    name: '1 to 14 Mukhi Nepali Rudraksha',
+    hindiName: '१ से १४ मुखी नेपाली रुद्राक्ष',
+    origin: 'Nepal (Himalayan)',
+    badge: 'Collector & Astrological',
+    short: 'Authentic high-vibration Nepali beads, certified for natural Mukhi lines and density.',
+    shortHi: 'प्राकृतिक नेपाली रुद्राक्ष मनके, प्राकृतिक मुखी रेखाओं एवं शुद्धता के साथ।',
+  },
+  {
+    id: 'siddh-rudraksha-mala',
+    name: 'Siddh Rudraksha Mala (108+1 Beads)',
+    hindiName: 'सिद्ध रुद्राक्ष माला (१०८+१ दाने)',
+    origin: 'Nepal / Indonesia',
+    badge: 'Vedic Energised',
+    short: 'Traditional 5-mukhi Japa mala knotted in red silk thread with silver caps available.',
+    shortHi: 'पंचमुखी रुद्राक्ष की पारंपरिक १०८ दानों की जप माला, शुद्ध धागे में गुंथी हुई।',
+  },
+  {
+    id: 'rudraksha-silver-bracelet',
+    name: 'Rudraksha Silver Bracelet & Kada',
+    hindiName: 'रुद्राक्ष चांदी ब्रेसलेट / कड़ा',
+    origin: '925 Sterling Silver',
+    badge: 'Everyday Sacred',
+    short: 'Handcrafted in pure 925 sterling silver with authentic natural Rudraksha beads.',
+    shortHi: 'शुद्ध चांदी में जड़ा हुआ प्राकृतिक रुद्राक्ष ब्रेसलेट एवं कड़ा।',
+  },
+  {
+    id: 'gauri-shankar-rudraksha',
+    name: 'Gauri Shankar Rudraksha',
+    hindiName: 'गौरी शंकर रुद्राक्ष',
+    origin: 'Nepal',
+    badge: 'Rare & Auspicious',
+    short: 'Rare naturally conjoined twin bead representing Lord Shiva & Goddess Parvati for harmony.',
+    shortHi: 'प्राकृतिक रूप से जुड़े दो रुद्राक्ष मनके, शिव-शक्ति स्वरूप एवं पारिवारिक सुख हेतु।',
+  },
+  {
+    id: 'rudraksha-pendant',
+    name: 'Rudraksha Pendants & Lockets',
+    hindiName: 'रुद्राक्ष पेंडेंट एवं लॉकेट',
+    origin: 'Gold / Silver / Ashtadhatu',
+    badge: 'Protection',
+    short: 'Single selected Mukhi bead capped in gold or silver for astrological protection and focus.',
+    shortHi: 'सोने, चांदी या अष्टधातु कैपिंग में एक मुखी से चौदह मुखी पेंडेंट।',
+  },
+  {
+    id: 'indonesian-mala',
+    name: 'Indonesian Small-Bead Mala',
+    hindiName: 'इंडोनेशियाई सूक्ष्म दाना माला',
+    origin: 'Indonesia',
+    badge: 'Comfort Wear',
+    short: 'Smooth, lightweight fine-grain beads suitable for continuous everyday wearing.',
+    shortHi: 'हल्के व चिकने सूक्ष्म दानों की आरामदायक नित्य धारण माला।',
+  },
+]
+
+/* ---------- Secondary / Traditional Collections (Preserved) ---------- */
+const SECONDARY_COLLECTIONS = [
+  {
+    id: 'puja-items',
+    icon: '🕉️',
+    name: 'Puja Items',
+    hindiName: 'पूजा सामग्री',
+    desc: {
+      en: 'Gangajal containers, brass puja thali, authentic camphor, dhoop, agarbatti, shankh and ritual essentials.',
+      hi: 'पूजा थाली, दक्षिणावर्ती शंख, गंगाजल कलश, शुद्ध भीमसेनी कपूर एवं दैनिक पूजा सामग्री।',
+    },
+  },
+  {
+    id: 'yantra-rashi',
+    icon: '🔯',
+    name: 'Yantra & Rashi Yantra',
+    hindiName: 'यंत्र एवं राशि यंत्र',
+    desc: {
+      en: 'Energised copper, brass and silver Shree Yantra, Kuber Yantra, Mahamrityunjaya and 12 Rashi Yantras.',
+      hi: 'श्री यंत्र, कुबेर यंत्र, महामृत्युंजय एवं १२ राशि यंत्र — तांबा, पीतल व चांदी में।',
+    },
+  },
+  {
+    id: 'kavach',
+    icon: '🛡️',
+    name: 'Kavach & Talismans',
+    hindiName: 'सुरक्षा कवच एवं ताबीज',
+    desc: {
+      en: 'Consecrated protection pendants, Nazar Suraksha kavach, and planet-specific astrological amulets.',
+      hi: 'नजर सुरक्षा, नवग्रह रक्षा एवं सिद्ध वैदिक सुरक्षा कवच।',
+    },
+  },
+  {
+    id: 'lockets-pendants',
+    icon: '📿',
+    name: 'Lockets & Pendants',
+    hindiName: 'धार्मिक लॉकेट एवं पेंडेंट',
+    desc: {
+      en: 'Lord Shiva, Hanuman Ji, Om, Swastik and deity lockets in sterling silver and gold plating.',
+      hi: 'चांदी व सोने में शिव, हनुमान जी, ॐ एवं स्वस्तिक लॉकेट।',
+    },
+  },
+  {
+    id: 'rings',
+    icon: '💍',
+    name: 'Astrological Rings',
+    hindiName: 'ज्योतिषीय अंगूठियां',
+    desc: {
+      en: 'Custom rings handcrafted in gold, silver, panchdhatu and ashtadhatu with open-back setting.',
+      hi: 'सोना, चांदी, पंचधातु एवं अष्टधातु में बैक-ओपन ज्योतिषीय अंगूठियां।',
+    },
+  },
+  {
+    id: 'horse-shoe',
+    icon: '🐎',
+    name: 'Black Horse Shoe (Kale Ghode Ki Naal)',
+    hindiName: 'काले घोड़े की नाल व छल्ला',
+    desc: {
+      en: 'Authentic front-hoof black horse shoe and energized rings for Saturn / Shani protection.',
+      hi: 'शनि दोष निवारण हेतु काले घोड़े की नाल एवं नाल का छल्ला।',
+    },
+  },
+  {
+    id: 'worship-idols',
+    icon: '🛕',
+    name: 'Worship Idols & Murti',
+    hindiName: 'पूजा मूर्तियां',
+    desc: {
+      en: 'Solid brass, bronze, silver and panchdhatu murtis of Laddu Gopal, Ganesha, Laxmi, and Hanuman Ji.',
+      hi: 'पीतल, अष्टधातु एवं चांदी में लड्डू गोपाल, गणेश, लक्ष्मी व हनुमान जी की मूर्तियां।',
+    },
+  },
+  {
+    id: 'shivling',
+    icon: '🪨',
+    name: 'Parad & Sphatik Shivling',
+    hindiName: 'पारद एवं स्फटिक शिवलिंग',
+    desc: {
+      en: 'Authentic mercury (Parad) purified Shivling and natural transparent quartz Sphatik Shivling.',
+      hi: 'सिद्ध पारद शिवलिंग एवं प्राकृतिक स्फटिक शिवलिंग।',
+    },
+  },
+  {
+    id: 'hanuman-frames',
+    icon: '🖼️',
+    name: 'Hanuman Ji Photo Frames',
+    hindiName: 'हनुमान जी फोटो फ्रेम',
+    desc: {
+      en: 'Gold foil, embossed and wooden frames of Panchmukhi and Sankat Mochan Hanuman Ji.',
+      hi: 'पंचमुखी व संकटमोचन हनुमान जी के स्वर्ण-वर्क एवं सुंदर काष्ठ फ्रेम।',
+    },
+  },
+  {
+    id: 'showpieces',
+    icon: '🪔',
+    name: 'Decorative Showpieces',
+    hindiName: 'सजावटी शोपीस',
+    desc: {
+      en: 'Auspicious home decor items, brass diyas, hanging bells, tortoise, and Vastu artifacts.',
+      hi: 'वास्तु कछुआ, पीतल के दीपक, घंटी एवं मांगलिक गृह-सज्जा वस्तुएं।',
+    },
+  },
+  {
+    id: 'jaap-mala',
+    icon: '📿',
+    name: 'Jaap Mala (Tulsi, Sphatik, Kamal Gatta)',
+    hindiName: 'जाप माला (तुलसी, स्फटिक, कमलगट्टा)',
+    desc: {
+      en: 'Pure Vrindavan Tulsi mala, cooling Sphatik mala, and Lakshmi Kamal Gatta japa malas.',
+      hi: 'मूल वृन्दावन तुलसी माला, स्फटिक माला एवं धनप्रद कमलगट्टा माला।',
+    },
+  },
+  {
+    id: 'kada-bracelet',
+    icon: '💫',
+    name: 'Kada & Astrological Bracelets',
+    hindiName: 'कड़ा एवं ब्रेसलेट',
+    desc: {
+      en: 'Pure copper, brass, panchdhatu and silver kadas, Navratna bracelets and healing stone cuffs.',
+      hi: 'शुद्ध तांबा, पंचधातु एवं चांदी के कड़े, नवरत्न ब्रेसलेट।',
+    },
+  },
+]
+
+/* ---------- Rudraksha Product Card ---------- */
+function RudrakshaCard({ item, lang, t }) {
+  const isHi = lang === 'hi'
+  const name = isHi ? item.hindiName : item.name
+  const subName = isHi ? item.name : item.hindiName
+  const desc = isHi && item.shortHi ? item.shortHi : item.short
+  const enquireMsg =
+    `Namaste Sachin Jewellers! I am interested in ${item.name} (${item.hindiName}) [${item.origin}]. ` +
+    `Please share details, photos, and price.`
+  const enquireHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(enquireMsg)}`
+
+  return (
+    <motion.article
+      className="rudraksha-card"
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+    >
+      <div className="rudraksha-card-header">
+        <span className="rudraksha-badge">{item.badge}</span>
+        <span className="rudraksha-origin">{item.origin}</span>
+      </div>
+      <div className="rudraksha-card-body">
+        <h3 className="rudraksha-title">
+          {name} <span className="rudraksha-subname">({subName})</span>
+        </h3>
+        <p className="rudraksha-desc">{desc}</p>
+      </div>
+      <div className="rudraksha-card-footer">
+        <span className="rudraksha-price-label">{t.catalogue.priceOnRequest}</span>
+        <a
+          href={enquireHref}
+          target="_blank"
+          rel="noreferrer"
+          className="btn btn-outline rudraksha-enquire-btn"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M12 3.5a8.4 8.4 0 0 0-7.2 12.7L3.5 20.5l4.4-1.15A8.4 8.4 0 1 0 12 3.5Zm4.8 11.9c-.17.47-1 .94-1.37.97-.37.03-.72.17-2.42-.5-2.05-.8-3.35-2.9-3.45-3.03-.1-.13-.82-1.06-.82-2.03 0-.97.52-1.45.7-1.65.18-.2.4-.25.53-.25h.4c.12 0 .29-.06.45.34.17.4.57 1.4.62 1.5.05.1.08.22.02.35-.07.13-.1.21-.2.33-.1.12-.21.26-.3.35-.1.1-.21.21-.09.41.12.2.52.86 1.12 1.39.77.69 1.42.9 1.62 1 .2.1.31.08.43-.05.11-.13.5-.6.63-.8.13-.2.27-.17.45-.1.18.07 1.18.57 1.38.67.2.1.33.15.38.23.05.08.05.48-.12.95Z"
+            />
+          </svg>
+          {t.catalogue.enquire}
+        </a>
+      </div>
+    </motion.article>
+  )
+}
+
+/* ---------- Preserved Secondary Collections Card ---------- */
+function SecondaryCollectionCard({ item, lang, t }) {
+  const isHi = lang === 'hi'
+  const title = isHi ? item.hindiName : item.name
+  const subTitle = isHi ? item.name : item.hindiName
+  const desc = item.desc[lang] || item.desc.en
+  const enquireMsg =
+    `Namaste Sachin Jewellers! I am interested in your ${item.name} (${item.hindiName}) collection. ` +
+    `Please share available items, catalogue photos and pricing.`
+  const enquireHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(enquireMsg)}`
+
+  return (
+    <motion.article
+      className="secondary-collection-card"
+      whileHover={{ y: -4 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+    >
+      <div className="sec-card-icon" aria-hidden="true">
+        {item.icon}
+      </div>
+      <div className="sec-card-body">
+        <h3 className="sec-card-title">
+          {title} <span className="sec-card-subtitle">({subTitle})</span>
+        </h3>
+        <p className="sec-card-desc">{desc}</p>
+      </div>
+      <a
+        href={enquireHref}
+        target="_blank"
+        rel="noreferrer"
+        className="sec-card-action"
+      >
+        <span>{t.catalogue.enquire}</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+          <path
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5 12h14M12 5l7 7-7 7"
+          />
+        </svg>
+      </a>
     </motion.article>
   )
 }
@@ -1944,6 +2270,7 @@ function MainSite() {
       ? 'catalogue'
       : 'about',
   )
+  const [collection, setCollection] = useState('gemstones') // 'gemstones' | 'rudraksha'
   const [category, setCategory] = useState('All') // catalogue category tab
   const [showSplash, setShowSplash] = useState(() => !splashAlreadySeen())
   const [form, setForm] = useState({ name: '', email: '', phone: '', comment: '' })
@@ -1982,6 +2309,13 @@ function MainSite() {
   useEffect(() => {
     window.scrollTo({ top: 0 })
   }, [view])
+
+  // Sync view when navigating via hash (e.g. #catalogue) or router state.
+  useEffect(() => {
+    if (location.state?.view === 'catalogue' || location.hash === '#catalogue') {
+      setView('catalogue')
+    }
+  }, [location])
 
   // Play the intro splash once per visit, then fade it out after ~2s.
   useEffect(() => {
@@ -2099,31 +2433,185 @@ function MainSite() {
       <main className="about-page">
         {view === 'catalogue' && (
           <FadeSection className="section catalogue">
-            <h2>{t.catalogue.heading}</h2>
-            <p className="enquiry-intro">{t.catalogue.intro}</p>
-
-            <div
-              className="catalogue-filter"
-              role="group"
-              aria-label="Filter by category"
-            >
-              {CATEGORY_TABS.map((cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  className={`catalogue-tab${category === cat ? ' active' : ''}`}
-                  aria-pressed={category === cat}
-                  onClick={() => setCategory(cat)}
-                >
-                  {cat}
-                </button>
-              ))}
+            <div className="catalogue-header">
+              <h2>{t.catalogue.heading}</h2>
+              <p className="catalogue-subheading">{t.catalogue.subheading}</p>
+              <p className="enquiry-intro">{t.catalogue.intro}</p>
             </div>
 
-            <div className="catalogue-grid">
-              {shownProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+            {/* Primary Collections Selector: ONLY 2 — 💎 GEMSTONES & 📿 RUDRAKSHA */}
+            <div
+              className="primary-collections-grid"
+              role="tablist"
+              aria-label="Primary Collections"
+            >
+              <motion.button
+                type="button"
+                role="tab"
+                aria-selected={collection === 'gemstones'}
+                className={`collection-card collection-card-gemstones${
+                  collection === 'gemstones' ? ' is-active' : ''
+                }`}
+                onClick={() => setCollection('gemstones')}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+              >
+                <div className="collection-card-inner">
+                  <div className="collection-card-icon" aria-hidden="true">💎</div>
+                  <div className="collection-card-content">
+                    <span className="collection-card-badge">
+                      {t.catalogue.gemstones.badge}
+                    </span>
+                    <h3 className="collection-card-title">
+                      {t.catalogue.gemstones.title}
+                    </h3>
+                    <p className="collection-card-tagline">
+                      {t.catalogue.gemstones.tagline}
+                    </p>
+                  </div>
+                  <span className="collection-card-cta">
+                    {collection === 'gemstones'
+                      ? t.catalogue.viewingNow
+                      : t.catalogue.gemstones.explore}{' '}
+                    &rarr;
+                  </span>
+                </div>
+              </motion.button>
+
+              <motion.button
+                type="button"
+                role="tab"
+                aria-selected={collection === 'rudraksha'}
+                className={`collection-card collection-card-rudraksha${
+                  collection === 'rudraksha' ? ' is-active' : ''
+                }`}
+                onClick={() => setCollection('rudraksha')}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+              >
+                <div className="collection-card-inner">
+                  <div className="collection-card-icon" aria-hidden="true">📿</div>
+                  <div className="collection-card-content">
+                    <span className="collection-card-badge">
+                      {t.catalogue.rudraksha.badge}
+                    </span>
+                    <h3 className="collection-card-title">
+                      {t.catalogue.rudraksha.title}
+                    </h3>
+                    <p className="collection-card-tagline">
+                      {t.catalogue.rudraksha.tagline}
+                    </p>
+                  </div>
+                  <span className="collection-card-cta">
+                    {collection === 'rudraksha'
+                      ? t.catalogue.viewingNow
+                      : t.catalogue.rudraksha.explore}{' '}
+                    &rarr;
+                  </span>
+                </div>
+              </motion.button>
+            </div>
+
+            {/* Active Collection View: GEMSTONES */}
+            {collection === 'gemstones' && (
+              <div className="gemstones-collection-view">
+                <div
+                  className="catalogue-filter"
+                  role="group"
+                  aria-label="Filter by category"
+                >
+                  {CATEGORY_TABS.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      className={`catalogue-tab${category === cat ? ' active' : ''}`}
+                      aria-pressed={category === cat}
+                      onClick={() => setCategory(cat)}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="catalogue-grid">
+                  {shownProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Active Collection View: RUDRAKSHA */}
+            {collection === 'rudraksha' && (
+              <div className="rudraksha-collection-view">
+                <div className="rudraksha-grid">
+                  {RUDRAKSHA_PRODUCTS.map((item) => (
+                    <RudrakshaCard
+                      key={item.id}
+                      item={item}
+                      lang={lang}
+                      t={t}
+                    />
+                  ))}
+                </div>
+
+                {/* Rudraksha & Astrological Consultation Banner */}
+                <div className="rudraksha-consult-banner">
+                  <div className="rudraksha-consult-body">
+                    <h3>{t.catalogue.rudrakshaConsultTitle}</h3>
+                    <p>{t.catalogue.rudrakshaConsultDesc}</p>
+                  </div>
+                  <a
+                    href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                      'Namaste Sachin Jewellers! I would like personal astrological consultation for selecting and energising the right Rudraksha bead.',
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-solid rudraksha-consult-btn"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 3.5a8.4 8.4 0 0 0-7.2 12.7L3.5 20.5l4.4-1.15A8.4 8.4 0 1 0 12 3.5Zm4.8 11.9c-.17.47-1 .94-1.37.97-.37.03-.72.17-2.42-.5-2.05-.8-3.35-2.9-3.45-3.03-.1-.13-.82-1.06-.82-2.03 0-.97.52-1.45.7-1.65.18-.2.4-.25.53-.25h.4c.12 0 .29-.06.45.34.17.4.57 1.4.62 1.5.05.1.08.22.02.35-.07.13-.1.21-.2.33-.1.12-.21.26-.3.35-.1.1-.21.21-.09.41.12.2.52.86 1.12 1.39.77.69 1.42.9 1.62 1 .2.1.31.08.43-.05.11-.13.5-.6.63-.8.13-.2.27-.17.45-.1.18.07 1.18.57 1.38.67.2.1.33.15.38.23.05.08.05.48-.12.95Z"
+                      />
+                    </svg>
+                    {t.catalogue.rudrakshaConsultBtn}
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* Preserved Secondary Collections: Clean, elegant, non-intrusive */}
+            <div className="more-collections-section">
+              <div className="more-collections-header">
+                <span className="more-collections-eyebrow">
+                  {t.catalogue.moreCollections.eyebrow}
+                </span>
+                <h3 className="more-collections-title">
+                  {t.catalogue.moreCollections.heading}
+                </h3>
+                <p className="more-collections-intro">
+                  {t.catalogue.moreCollections.intro}
+                </p>
+              </div>
+
+              <div className="secondary-collections-grid">
+                {SECONDARY_COLLECTIONS.map((item) => (
+                  <SecondaryCollectionCard
+                    key={item.id}
+                    item={item}
+                    lang={lang}
+                    t={t}
+                  />
+                ))}
+              </div>
             </div>
           </FadeSection>
         )}
