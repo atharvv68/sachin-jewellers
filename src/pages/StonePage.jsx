@@ -35,7 +35,7 @@ function metaDescription(product, variant) {
   return (
     `${colour}${product.name} (${variant.hindiName}) — ${variant.short} ` +
     `${variant.certified ? 'Lab-certified. ' : ''}Origin: ${variant.origin}. ` +
-    `Buy online at ${BRAND}, Dehradun.`
+    `Buy online at ${BRAND}.`
   ).slice(0, 300)
 }
 

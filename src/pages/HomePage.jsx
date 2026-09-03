@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import GemstoneIntro from '../components/gemstone/GemstoneIntro.jsx'
 import GemstoneHero from '../components/home/GemstoneHero.jsx'
+import GemstoneShowcase from '../components/home/GemstoneShowcase.jsx'
 import FeaturedGemstonesCoverflow from '../components/home/FeaturedGemstonesCoverflow.jsx'
 import GemstoneCategoryGrid from '../components/home/GemstoneCategoryGrid.jsx'
 import GemstoneTrustPillars from '../components/home/GemstoneTrustPillars.jsx'
@@ -32,7 +33,10 @@ export default function HomePage({ lang = 'en', t }) {
       {/* 1. Gemstone-First Hero Section with live ambient facet canvas */}
       <GemstoneHero lang={lang} t={t} />
 
-      {/* 2. Featured Gemstones 3D Coverflow Showcase (Navratna) */}
+      {/* 2. Curated Gemstone Showcase — real catalogue products */}
+      <GemstoneShowcase t={t} />
+
+      {/* 3. Featured Gemstones 3D Coverflow Showcase (Navratna) */}
       <FeaturedGemstonesCoverflow t={t} />
 
       {/* 3. Explore by Gemstone Categories (Navratna, Upratna, Semi-Precious, Pearl & Organic) */}
@@ -50,10 +54,10 @@ export default function HomePage({ lang = 'en', t }) {
       {/* 7. Free Kundali Checker with Lahiri Ayanamsa */}
       <KundaliChecker lang={lang} t={t} />
 
-      {/* 8. Dehradun Heritage & Master Gemologist Story Teaser */}
+      {/* 8. Master Gemologist Story Teaser */}
       <FounderStoryTeaser lang={lang} t={t} />
 
-      {/* 9. Direct Enquiry & Store Consultation Section */}
+      {/* 9. Direct Enquiry & Personal Consultation Section */}
       <EnquirySection lang={lang} t={t} />
     </div>
   )

@@ -214,8 +214,8 @@ export default function Navbar({
                             </span>
                             <span className="mega-col-caption">
                               {isHi
-                                ? 'प्राकृतिक नेपाली एवं सिद्ध रुद्राक्ष'
-                                : 'Authentic Nepali & Siddh Rudraksha'}
+                                ? 'पवित्र नेपाली एवं सिद्ध रुद्राक्ष'
+                                : 'Sacred Nepali & Siddh Rudraksha'}
                             </span>
                           </div>
                         </div>

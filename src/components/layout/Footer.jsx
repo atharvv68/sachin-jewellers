@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import sjMonogram from '../../assets/sj-monogram-only.png'
 import { BRAND, BUSINESS, OWNER_EMAIL, OWNER_PHONE, OWNER_PHONE_INTL, WHATSAPP_NUMBER } from '../../shopConfig.js'
-import { SOCIALS } from '../../data/catalogData.js'
 import PolicyModal from './PolicyModal.jsx'
 
 export default function Footer({ lang = 'en', t }) {
@@ -20,21 +19,21 @@ export default function Footer({ lang = 'en', t }) {
           <div className="footer-trust-item">
             <span className="footer-trust-icon">🔬</span>
             <div className="footer-trust-copy">
-              <strong>{isHi ? '100% लैब प्रमाणित' : '100% Lab Certified'}</strong>
+              <strong>{isHi ? 'लैब प्रमाणित रत्न' : 'Lab Certified Gemstones'}</strong>
               <span>{isHi ? 'प्राकृतिक अप्रसंस्कृत वैदिक रत्न' : 'Natural unheated Vedic gemstones'}</span>
             </div>
           </div>
           <div className="footer-trust-item">
             <span className="footer-trust-icon">📿</span>
             <div className="footer-trust-copy">
-              <strong>{isHi ? 'प्रामाणिक नेपाली रुद्राक्ष' : 'Authentic Nepali Beads'}</strong>
+              <strong>{isHi ? 'सिद्ध रुद्राक्ष' : 'Sacred Rudraksha'}</strong>
               <span>{isHi ? 'वैदिक मंत्रों से सिद्ध एवं ऊर्जान्वित' : 'Vedic sanctified & energised'}</span>
             </div>
           </div>
           <div className="footer-trust-item">
             <span className="footer-trust-icon">🏛️</span>
             <div className="footer-trust-copy">
-              <strong>{isHi ? 'देहरादून धरोहर' : 'Dehradun Heritage'}</strong>
+              <strong>{isHi ? 'विश्वसनीय धरोहर' : 'Heritage & Trust'}</strong>
               <span>{isHi ? '15+ वर्षों का अटूट विश्वास व अनुभव' : '15+ Years of trusted legacy'}</span>
             </div>
           </div>
@@ -62,12 +61,12 @@ export default function Footer({ lang = 'en', t }) {
           </Link>
           <p className="footer-description">
             {isHi
-              ? 'देहरादून की प्रतिष्ठित रत्न एवं रुद्राक्ष धरोहर। 15+ वर्षों से वैदिक ज्योतिष अनुसार शुद्ध, प्राकृतिक एवं प्रमाणित रत्नों की प्रामाणिक सेवा।'
-              : 'Dehradun’s premier destination for certified Vedic gemstones, authentic Nepali Rudraksha, and personalized astrological guidance since 2011.'}
+              ? 'प्रमाणित वैदिक रत्नों, प्रामाणिक रुद्राक्ष और व्यक्तिगत ज्योतिषीय परामर्श के लिए विश्वसनीय नाम।'
+              : 'A house of certified fine gemstones, sacred Rudraksha and personalised astrological guidance.'}
           </p>
           <div className="footer-social-links">
             <a
-              href={SOCIALS.whatsapp}
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noreferrer"
               className="footer-social-btn"
@@ -78,7 +77,7 @@ export default function Footer({ lang = 'en', t }) {
               </svg>
             </a>
             <a
-              href={SOCIALS.instagram}
+              href="https://instagram.com/"
               target="_blank"
               rel="noreferrer"
               className="footer-social-btn"
@@ -91,7 +90,7 @@ export default function Footer({ lang = 'en', t }) {
               </svg>
             </a>
             <a
-              href={SOCIALS.facebook}
+              href="https://facebook.com/"
               target="_blank"
               rel="noreferrer"
               className="footer-social-btn"
@@ -99,18 +98,6 @@ export default function Footer({ lang = 'en', t }) {
             >
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                 <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
-              </svg>
-            </a>
-            <a
-              href={SOCIALS.googleMaps}
-              target="_blank"
-              rel="noreferrer"
-              className="footer-social-btn"
-              aria-label="Google Maps Showroom Location"
-            >
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
               </svg>
             </a>
           </div>
@@ -174,7 +161,7 @@ export default function Footer({ lang = 'en', t }) {
             </li>
             <li>
               <a href="/#enquiry">
-                {isHi ? 'परामर्श व पूछताछ फॉर्म' : 'Book a Store Consultation'}
+                {isHi ? 'परामर्श व पूछताछ फॉर्म' : 'Book a Personal Consultation'}
               </a>
             </li>
             <li>
@@ -190,14 +177,10 @@ export default function Footer({ lang = 'en', t }) {
           </ul>
         </div>
 
-        {/* Column 4: Showroom & Contact Info */}
+        {/* Column 4: Contact & Business */}
         <div className="footer-contact-col">
-          <h4 className="footer-col-title">{isHi ? 'शोरूम एवं संपर्क' : 'Dehradun Showroom'}</h4>
+          <h4 className="footer-col-title">{isHi ? 'संपर्क एवं व्यवसाय' : 'Contact & Business'}</h4>
           <address className="footer-address-block">
-            <p className="footer-address-line">
-              <span className="footer-icon">📍</span>
-              <span>Paltan Bazaar / Sarafa Market, Dehradun, Uttarakhand 248001</span>
-            </p>
             <p className="footer-address-line">
               <span className="footer-icon">📞</span>
               <a href={`tel:+${OWNER_PHONE_INTL}`}>+91 {OWNER_PHONE}</a>

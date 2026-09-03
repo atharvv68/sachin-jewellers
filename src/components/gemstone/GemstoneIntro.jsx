@@ -365,8 +365,8 @@ export default function GemstoneIntro({ onComplete, lang = 'en' }) {
             transition={{ duration: 0.8, delay: 2.5, ease: EASE }}
           >
             {isHindi
-              ? 'प्राकृतिक प्रमाणित वैदिक रत्न · देहरादून धरोहर'
-              : 'Natural Certified Vedic Gemstones · Dehradun Heritage'}
+              ? 'प्राकृतिक प्रमाणित वैदिक रत्न · द हाउस ऑफ फाइन जेमस्टोन्स'
+              : 'Natural Certified Vedic Gemstones · The House of Fine Gemstones'}
           </motion.p>
         </motion.div>
       </div>

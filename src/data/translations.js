@@ -19,13 +19,12 @@ export const TRANSLATIONS = {
       skip: 'Skip Intro',
       brand: 'SACHIN JEWELLERS',
       tagline: 'THE HOUSE OF FINE GEMSTONES',
-      subtitle: 'Natural Certified Vedic Gemstones · Dehradun Heritage',
+      subtitle: 'Natural Certified Vedic Gemstones · The House of Fine Gemstones',
     },
     hero: {
-      eyebrow: 'Dehradun’s Premier Gemstone Destination',
+      eyebrow: '✦ The Art of Fine Gemstones ✦',
       title: 'The House of Fine Gemstones',
-      tagline:
-        'Ethically sourced, laboratory-certified natural Vedic gemstones and energised Rudraksha. Handcrafted with generational mastery since 2011.',
+      tagline: 'Rare colour. Exceptional character. Timeless beauty.',
       exploreGemstones: 'Explore Gemstones',
       bookConsult: 'Book a Consultation',
       viewRudraksha: 'Sacred Rudraksha',
@@ -59,9 +58,11 @@ export const TRANSLATIONS = {
     trustPillars: {
       eyebrow: 'Our Promise',
       heading: 'The Standards of Sachin Jewellers',
+      subheading:
+        'Every stone that carries our name is chosen, certified and consecrated with care.',
       cards: [
         {
-          heading: '100% Lab Certified',
+          heading: 'Lab Certified',
           body: 'Every gemstone is tested and certified by recognised gemological laboratories. Never treated, never synthetic.',
         },
         {
@@ -74,13 +75,13 @@ export const TRANSLATIONS = {
         },
         {
           heading: '15+ Years Family Heritage',
-          body: 'Generations of expertise in identifying, cutting and mounting authentic astrological gemstones in Dehradun.',
+          body: 'Generations of expertise in identifying, cutting and mounting authentic astrological gemstones.',
         },
       ],
     },
     rudrakshaSpotlight: {
       eyebrow: 'Sacred Himalayan Beads',
-      heading: 'Authentic Nepali & Indonesian Rudraksha',
+      heading: 'Sacred Nepali & Indonesian Rudraksha',
       intro:
         'From rare 1 Mukhi to 14 Mukhi collector beads, Siddh Malas, and 925 Sterling Silver bracelets — naturally harvested and energised for spiritual upliftment.',
       exploreBtn: 'Explore Rudraksha Collection',
@@ -90,14 +91,14 @@ export const TRANSLATIONS = {
       eyebrow: 'Craftsmanship & Integrity',
       heading: 'Meet Founder Sachin Kumar Verma',
       bio:
-        'With over 15 years dedicated to the gemstone craft in Dehradun, Sachin Kumar Verma personally inspects and certifies every single stone that enters the house.',
+        'With over 15 years dedicated to the gemstone craft, Sachin Kumar Verma personally inspects and certifies every single stone that enters the house.',
       readMore: 'Read Full Heritage Story',
     },
     catalogue: {
       heading: 'Catalogue',
       subheading: 'Explore Our Collections',
       intro:
-        'Ethically sourced natural gemstones and authentic energised rudraksha. Tap “Enquire” for certification details, custom sizing, and worldwide shipping.',
+        'Natural certified gemstones and energised rudraksha. Tap “Enquire” for certification details, custom sizing, and worldwide shipping.',
       viewingNow: 'Active Collection',
       priceOnRequest: 'Price on request',
       enquire: 'Enquire on WhatsApp',
@@ -159,6 +160,14 @@ export const TRANSLATIONS = {
       position: '{i} of {n}',
       buyWaMessage:
         'Namaste Sachin Jewellers! I would like to buy this now: {product} ({price}). Please help me place the order.',
+    },
+    showcase: {
+      eyebrow: 'Curated Selection',
+      heading: 'Rare Colour, Exceptional Character',
+      subheading:
+        'A hand-picked edit of the world’s finest certified gemstones — each with its own story, cut and inner light.',
+      explore: 'Explore',
+      viewAll: 'View All Gemstones',
     },
     checkout: {
       heading: 'Secure Checkout',
@@ -388,13 +397,12 @@ export const TRANSLATIONS = {
       skip: 'स्किप करें',
       brand: 'सचिन ज्वैलर्स',
       tagline: 'द हाउस ऑफ फाइन जेमस्टोन्स',
-      subtitle: 'प्राकृतिक प्रमाणित वैदिक रत्न · देहरादून धरोहर',
+      subtitle: 'प्राकृतिक प्रमाणित वैदिक रत्न · द हाउस ऑफ फाइन जेमस्टोन्स',
     },
     hero: {
-      eyebrow: 'देहरादून का प्रतिष्ठित रत्न प्रतिष्ठान',
+      eyebrow: '✦ उत्कृष्ट रत्नों की कला ✦',
       title: 'द हाउस ऑफ फाइन जेमस्टोन्स',
-      tagline:
-        'प्रामाणिक, लैब-प्रमाणित प्राकृतिक वैदिक रत्न एवं प्राण-प्रतिष्ठित रुद्राक्ष। 2011 से अटूट विश्वास और शिल्प कौशल के साथ।',
+      tagline: 'दुर्लभ रंग। असाधारण चरित्र। कालातीत सुंदरता।',
       exploreGemstones: 'रत्न संग्रह देखें',
       bookConsult: 'परामर्श बुक करें',
       viewRudraksha: 'पवित्र रुद्राक्ष',
@@ -428,9 +436,11 @@ export const TRANSLATIONS = {
     trustPillars: {
       eyebrow: 'हमारा संकल्प',
       heading: 'सचिन ज्वैलर्स की विशेषताएँ',
+      subheading:
+        'हमारे नाम से प्रमाणित हर रत्न देखभाल, प्रमाणन एवं वैदिक विधि से संस्कारित किया जाता है।',
       cards: [
         {
-          heading: '100% लैब प्रमाणित',
+          heading: 'लैब प्रमाणित',
           body: 'हर रत्न प्रतिष्ठित प्रयोगशाला द्वारा प्रमाणित है। कभी कोई ट्रीटेड या कृत्रिम पत्थर नहीं बेचा जाता।',
         },
         {
@@ -443,13 +453,13 @@ export const TRANSLATIONS = {
         },
         {
           heading: '15+ वर्षों की पारिवारिक धरोहर',
-          body: 'देहरादून में प्रामाणिक ज्योतिषीय रत्नों की पहचान, कटिंग एवं निर्माण का वर्षों का अनुभव।',
+          body: 'प्रामाणिक ज्योतिषीय रत्नों की पहचान, कटिंग एवं निर्माण में पीढ़ियों का गहरा अनुभव।',
         },
       ],
     },
     rudrakshaSpotlight: {
       eyebrow: 'पवित्र हिमालयी दाने',
-      heading: 'प्रामाणिक नेपाली एवं इंडोनेशियाई रुद्राक्ष',
+      heading: 'पवित्र नेपाली एवं इंडोनेशियाई रुद्राक्ष',
       intro:
         'दुर्लभ १ मुखी से १४ मुखी दाने, सिद्ध माला एवं शुद्ध चांदी ब्रेसलेट — प्राकृतिक रूप से चुने गए और आध्यात्मिक सिद्धि युक्त।',
       exploreBtn: 'रुद्राक्ष संग्रह देखें',
@@ -459,7 +469,7 @@ export const TRANSLATIONS = {
       eyebrow: 'शिल्प कौशल एवं प्रामाणिकता',
       heading: 'संस्थापक सचिन कुमार वर्मा से मिलें',
       bio:
-        'देहरादून में रत्न व्यवसाय में 15 से अधिक वर्षों के समर्पित अनुभव के साथ, सचिन कुमार वर्मा प्रत्येक रत्न की व्यक्तिगत रूप से जाँच करते हैं।',
+        'रत्न व्यवसाय में 15 से अधिक वर्षों के समर्पित अनुभव के साथ, सचिन कुमार वर्मा प्रत्येक रत्न की व्यक्तिगत रूप से जाँच करते हैं।',
       readMore: 'पूरी कहानी पढ़ें',
     },
     catalogue: {
@@ -528,6 +538,14 @@ export const TRANSLATIONS = {
       position: '{n} में से {i}',
       buyWaMessage:
         'नमस्ते सचिन ज्वैलर्स! मैं इसे अभी खरीदना चाहता/चाहती हूँ: {product} ({price})। कृपया ऑर्डर करने में मेरी मदद करें।',
+    },
+    showcase: {
+      eyebrow: 'विशेष चयन',
+      heading: 'दुर्लभ रंग, असाधारण चरित्र',
+      subheading:
+        'विश्व के उत्कृष्ट प्रमाणित रत्नों का एक सुव्यवस्थित चयन — हर रत्न की अपनी कथा, कट और आंतरिक ज्योति।',
+      explore: 'देखें',
+      viewAll: 'सभी रत्न देखें',
     },
     checkout: {
       heading: 'सुरक्षित चेकआउट',

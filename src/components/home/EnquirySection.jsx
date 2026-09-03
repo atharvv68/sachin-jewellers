@@ -124,12 +124,12 @@ export default function EnquirySection({ lang = 'en', t }) {
           <aside className="enquiry-contact-aside">
             <div className="contact-aside-card">
               <h3 className="aside-title">
-                {isHi ? 'सीधे शोरूम से संपर्क करें' : 'Direct Showroom Assistance'}
+                {isHi ? 'सीधे हमसे संपर्क करें' : 'Direct Personal Assistance'}
               </h3>
               <p className="aside-desc">
                 {isHi
                   ? 'हमारे विशेषज्ञ से सीधे फोन या व्हाट्सऐप पर तुरंत परामर्श प्राप्त करें।'
-                  : 'Speak directly with Sachin ji or visit our heritage showroom in Dehradun.'}
+                  : 'Speak directly with Sachin ji on phone or WhatsApp for immediate guidance.'}
               </p>
 
               <div className="aside-actions-list">

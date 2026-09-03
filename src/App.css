@@ -3319,8 +3319,13 @@
 .gemstone-hero-container {
   position: relative;
   z-index: 2;
-  max-width: 880px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: clamp(32px, 6vw, 64px);
   text-align: center;
 }
 
@@ -3343,11 +3348,21 @@
   background: rgba(201, 162, 39, 0.1);
   border: 1px solid var(--border-gold);
   border-radius: 999px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .hero-eyebrow-icon {
   font-size: 0.8rem;
+}
+
+.gemstone-hero-brandline {
+  font-family: var(--serif);
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin: 0 0 10px;
 }
 
 .gemstone-hero-title {
@@ -3376,6 +3391,208 @@
   flex-wrap: wrap;
   gap: 12px 20px;
   margin-bottom: 36px;
+}
+
+/* ---- Real-gemstone cluster (right column), 2.5D layered motion ---- */
+.gemstone-hero-showcase {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  order: -1; /* image above copy when stacked on mobile */
+}
+
+.gemstone-showcase-stage {
+  position: relative;
+  width: min(88vw, 460px);
+  aspect-ratio: 1 / 1;
+  transform-style: preserve-3d;
+}
+
+.gs-halo {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 45%,
+    rgba(201, 162, 39, 0.28) 0%,
+    rgba(201, 162, 39, 0.08) 42%,
+    transparent 70%
+  );
+  filter: blur(6px);
+  animation: gs-halo-pulse 7s ease-in-out infinite;
+}
+
+.gs-gem {
+  position: absolute;
+  margin: 0;
+  will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gs-gem-case {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at 50% 38%,
+    rgba(255, 250, 236, 0.14),
+    rgba(16, 13, 11, 0.55) 78%
+  );
+  box-shadow:
+    0 18px 46px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(201, 162, 39, 0.25);
+  animation: gs-float 7s ease-in-out infinite;
+}
+
+.gs-gem-case img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12%;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.45));
+}
+
+/* Slow specular sweep — pure light, no colour change */
+.gs-gem-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.22) 48%,
+    transparent 62%
+  );
+  transform: translateX(-120%);
+  animation: gs-sheen 6.5s ease-in-out infinite;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Cluster placement: main centre, four satellites around it */
+.gs-gem--main {
+  width: 52%;
+  height: 52%;
+  left: 24%;
+  top: 26%;
+  z-index: 5;
+  animation-duration: 8s;
+}
+.gs-gem--main .gs-gem-case {
+  animation-duration: 8s;
+}
+.gs-gem--tl {
+  width: 30%;
+  height: 30%;
+  left: 2%;
+  top: 6%;
+  z-index: 4;
+}
+.gs-gem--tr {
+  width: 27%;
+  height: 27%;
+  right: 4%;
+  top: 2%;
+  z-index: 4;
+}
+.gs-gem--bl {
+  width: 28%;
+  height: 28%;
+  left: 6%;
+  bottom: 6%;
+  z-index: 6;
+}
+.gs-gem--br {
+  width: 24%;
+  height: 24%;
+  right: 3%;
+  bottom: 10%;
+  z-index: 6;
+}
+
+@keyframes gs-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes gs-sheen {
+  0%,
+  70%,
+  100% {
+    transform: translateX(-120%);
+  }
+  85% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes gs-halo-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Static fallback for reduced-motion */
+.gemstone-hero-showcase.is-static .gs-gem,
+.gemstone-hero-showcase.is-static .gs-gem-case,
+.gemstone-hero-showcase.is-static .gs-gem-sheen,
+.gemstone-hero-showcase.is-static .gs-halo {
+  animation: none;
+}
+.gemstone-hero-showcase.is-static .gs-gem-sheen {
+  display: none;
+}
+
+/* Two-column layout from tablet up */
+@media (min-width: 993px) {
+  .gemstone-hero-container {
+    grid-template-columns: 1.05fr 0.95fr;
+    text-align: left;
+  }
+  .gemstone-hero-content {
+    align-items: flex-start;
+  }
+  .gemstone-hero-tagline {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .hero-trust-pills,
+  .gemstone-hero-actions {
+    justify-content: flex-start;
+  }
+  .gemstone-hero-showcase {
+    order: 0;
+  }
+  .gemstone-showcase-stage {
+    width: min(42vw, 520px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-gem,
+  .gs-gem-case,
+  .gs-gem-sheen,
+  .gs-halo {
+    animation: none !important;
+  }
+  .gs-gem-sheen {
+    display: none;
+  }
 }
 
 .trust-pill {
@@ -3415,6 +3632,167 @@
 .hero-btn-rudraksha {
   padding: 15px 28px;
   font-size: 0.84rem;
+}
+
+/* ---------- Curated Gemstone Showcase ---------- */
+.gs-showcase-section {
+  background: var(--bg);
+}
+
+.gs-showcase-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(16px, 2.4vw, 26px);
+}
+
+.gs-showcase-card {
+  list-style: none;
+}
+
+.gs-showcase-link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gs-showcase-card:hover .gs-showcase-link {
+  border-color: var(--gold);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+
+.gs-showcase-media {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at 50% 40%,
+    rgba(201, 162, 39, 0.12),
+    rgba(16, 13, 11, 0.6) 78%
+  );
+}
+
+.gs-showcase-glow {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(201, 162, 39, 0.35) 0%,
+    transparent 68%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gs-showcase-card:hover .gs-showcase-glow {
+  opacity: 1;
+}
+
+.gs-showcase-media img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 14%;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.4));
+}
+
+.gs-showcase-card:hover .gs-showcase-media img {
+  transform: scale(1.07);
+}
+
+.gs-showcase-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 18px 18px;
+  border-top: 1px solid var(--border-gold);
+}
+
+.gs-showcase-name {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.gs-showcase-name-hi {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.gs-showcase-explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  opacity: 0.55;
+  transform: translateX(-4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.gs-showcase-card:hover .gs-showcase-explore {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.gs-showcase-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(28px, 4vw, 44px);
+}
+
+.gs-showcase-viewall {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 30px;
+  font-size: 0.84rem;
+}
+
+/* Mobile: horizontal scroll-snap carousel */
+@media (max-width: 640px) {
+  .gs-showcase-grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 14px;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .gs-showcase-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .gs-showcase-card {
+    flex: 0 0 72%;
+    scroll-snap-align: center;
+  }
 }
 
 /* ---------- Gemstone Categories Grid ---------- */

@@ -5,32 +5,20 @@ export default function GemstoneTrustPillars({ lang = 'en', t }) {
   const isHi = lang === 'hi'
   const tp = t.trustPillars
 
-  const pillars = [
-    {
-      icon: '🔬',
-      title: tp.p1Title,
-      desc: tp.p1Desc,
-      badge: isHi ? 'लैब प्रमाणित' : 'Govt Certified',
-    },
-    {
-      icon: '🏛️',
-      title: tp.p2Title,
-      desc: tp.p2Desc,
-      badge: isHi ? '15+ वर्ष अनुभव' : '15+ Yrs Legacy',
-    },
-    {
-      icon: '⚖️',
-      title: tp.p3Title,
-      desc: tp.p3Desc,
-      badge: isHi ? 'प्रत्यक्ष स्रोत' : 'Mine Direct',
-    },
-    {
-      icon: '🕉️',
-      title: tp.p4Title,
-      desc: tp.p4Desc,
-      badge: isHi ? 'वैदिक सिद्ध' : 'Vedic Energised',
-    },
+  // Icon + short badge per card, aligned to the translation cards[] order.
+  const meta = [
+    { icon: '🔬', badge: isHi ? 'लैब प्रमाणित' : 'Lab Certified' },
+    { icon: '⚖️', badge: isHi ? 'प्रत्यक्ष स्रोत' : 'Direct Source' },
+    { icon: '🕉️', badge: isHi ? 'वैदिक सिद्ध' : 'Vedic Energised' },
+    { icon: '🏛️', badge: isHi ? '15+ वर्ष' : '15+ Years' },
   ]
+
+  const pillars = (tp.cards || []).map((card, i) => ({
+    icon: meta[i]?.icon || '✦',
+    title: card.heading,
+    desc: card.body,
+    badge: meta[i]?.badge || '',
+  }))
 
   return (
     <FadeSection id="trust-pillars" className="section trust-pillars-section">

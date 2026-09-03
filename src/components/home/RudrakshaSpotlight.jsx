@@ -28,7 +28,7 @@ export default function RudrakshaSpotlight({ lang = 'en', t }) {
               <div className="rudraksha-feature-pills">
                 <span className="rf-pill">
                   <span className="rf-dot">✓</span>
-                  {isHi ? 'नेपाल मूल के 100% प्राकृतिक मनके' : '100% Natural Nepal Origin'}
+                  {isHi ? 'नेपाल मूल के प्राकृतिक मनके' : 'Natural Himalayan Origin'}
                 </span>
                 <span className="rf-pill">
                   <span className="rf-dot">✓</span>

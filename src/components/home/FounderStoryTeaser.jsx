@@ -37,8 +37,8 @@ export default function FounderStoryTeaser({ lang = 'en' }) {
               <h2 className="founder-teaser-name">{BUSINESS.proprietor}</h2>
               <p className="founder-teaser-title">
                 {isHi
-                  ? 'संस्थापक एवं वैदिक रत्न विशेषज्ञ · देहरादून धरोहर'
-                  : 'Founder & Certified Vedic Gemologist · Dehradun'}
+                  ? 'संस्थापक एवं वैदिक रत्न विशेषज्ञ'
+                  : 'Founder & Certified Vedic Gemologist'}
               </p>
 
               <blockquote className="founder-teaser-quote">
@@ -51,8 +51,8 @@ export default function FounderStoryTeaser({ lang = 'en' }) {
 
               <p className="founder-teaser-text">
                 {isHi
-                  ? 'पल्टन बाजार / सराफा मार्केट, देहरादून में स्थित सचिन ज्वैलर्स 15 से अधिक वर्षों से उत्तर भारत भर में शुद्ध, अप्रसंस्कृत एवं लैब-प्रमाणित रत्नों के लिए जाना जाता है।'
-                  : 'Located in the historic Paltan Bazaar / Sarafa Market of Dehradun, Sachin Jewellers has served thousands of families across North India with ethically sourced, unheated natural gemstones and genuine Nepali Rudraksha.'}
+                  ? 'सचिन कुमार वर्मा 15 से अधिक वर्षों से रत्न शिल्प को समर्पित हैं — हर रत्न को स्वयं परखते, चुनते एवं वैदिक विधि से संस्कारित करते हैं।'
+                  : 'For over 15 years, Sachin Kumar Verma has devoted himself to the gemstone craft — personally inspecting, selecting and consecrating every stone that carries the house name.'}
               </p>
 
               <div className="founder-teaser-actions">

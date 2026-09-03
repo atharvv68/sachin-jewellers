@@ -204,7 +204,7 @@ export default function MobileDrawer({
           </a>
         </div>
 
-        {/* Drawer Footer with Language switch and address */}
+        {/* Drawer Footer with Language switch */}
         <div className="mobile-drawer-footer">
           <div className="mobile-drawer-lang-row">
             <span className="mobile-drawer-lang-label">
@@ -219,9 +219,6 @@ export default function MobileDrawer({
               {t.langName}
             </button>
           </div>
-          <p className="mobile-drawer-address">
-            Paltan Bazaar / Sarafa Market, Dehradun, Uttarakhand
-          </p>
         </div>
       </motion.aside>
     </div>
